@@ -1,0 +1,17 @@
+name: "Retención DOR"
+description: "Unidad operativa retenida"
+title: "[DOR] "
+labels: ["estado:dor"]
+body:
+  - type: dropdown
+    id: unidad
+    attributes:
+      label: Unidad
+      options: [FM-01, FM-02, FM-03, FM-04, SR-01, SR-02, SR-03, SR-04]
+    validations: {required: true}
+  - type: dropdown
+    id: motivo
+    attributes:
+      label: Motivo
+      options: [RET-01, RET-02, RET-03, RET-04, RET-05, RET-06]
+    validations: {required: true}

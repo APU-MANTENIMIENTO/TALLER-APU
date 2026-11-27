@@ -1,0 +1,27 @@
+name: "Cambio a INOPERATIVO"
+description: "Registrar salida de servicio"
+title: "[INOPERATIVO] "
+labels: ["estado:inoperativo"]
+body:
+  - type: dropdown
+    id: unidad
+    attributes:
+      label: Unidad
+      options: [FM-01, FM-02, FM-03, FM-04, SR-01, SR-02, SR-03, SR-04]
+    validations: {required: true}
+  - type: dropdown
+    id: causa
+    attributes:
+      label: Causa
+      options: [MEC-01, MEC-02, MEC-03, PM-01, SIN-01, LOG-01]
+    validations: {required: true}
+  - type: input
+    id: fecha_inicio
+    attributes:
+      label: Fecha y hora de ingreso
+    validations: {required: true}
+  - type: input
+    id: responsable
+    attributes:
+      label: Responsable
+    validations: {required: true}

@@ -1,0 +1,21 @@
+name: "Cambio a OPERATIVO"
+description: "Registrar liberación"
+title: "[OPERATIVO] "
+labels: ["estado:operativo"]
+body:
+  - type: dropdown
+    id: unidad
+    attributes:
+      label: Unidad
+      options: [FM-01, FM-02, FM-03, FM-04, SR-01, SR-02, SR-03, SR-04]
+    validations: {required: true}
+  - type: input
+    id: fecha_fin
+    attributes:
+      label: Fecha y hora de salida
+    validations: {required: true}
+  - type: textarea
+    id: trabajo_realizado
+    attributes:
+      label: Trabajo realizado
+    validations: {required: true}
