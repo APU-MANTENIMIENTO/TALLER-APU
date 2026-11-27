@@ -1,619 +1,308 @@
 <!DOCTYPE html>
-<html lang="es" data-accent="ambar">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0B1017">
-<title>TALLER FM · GitHub Studio — Repo, Kanban y base de flota</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TALLER FM · GitHub Studio</title>
 <style>
-:root{
-  --bg:#0B1017;--bg2:#0F1620;--sur:#141D28;--sur2:#1A2532;--ov:#212E3D;
-  --line:#28374A;--line2:#3A4E66;--txt:#E9EFF6;--mut:#94A7BD;--dim:#61758C;
-  --acc:#FFB020;--acc2:#FF7A2F;--accink:#1A1206;--accsoft:rgba(255,176,32,.14);
-  --gh:#238636;--gh2:#2EA043;--ghsoft:rgba(35,134,54,.16);
-  --red:#FF4554;--green:#3DD68C;--blue:#4C9AFF;--amber:#FFC53D;--orange:#FF7A2F;
-  --violet:#A78BFA;--teal:#2DD4BF;--magenta:#F472B6;--steel:#8FA3B8;
-  --fd:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;
-  --fb:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif;
-  --fm:'IBM Plex Mono',ui-monospace,Consolas,monospace;
-  --r:14px;--rs:10px;--top:58px;
-  --sh:0 12px 34px rgba(2,6,11,.55);
-}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:calc(var(--top) + 20px)}
-body{background:var(--bg);color:var(--txt);font-family:var(--fb);font-size:15px;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
-body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.055;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
-body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(760px 460px at 6% -8%,var(--accsoft),transparent 62%),
-             radial-gradient(820px 560px at 102% 106%,rgba(35,134,54,.10),transparent 62%),
-             radial-gradient(560px 400px at 88% 8%,rgba(255,69,84,.05),transparent 60%)}
-::selection{background:var(--acc);color:var(--accink)}
-*{scrollbar-width:thin;scrollbar-color:var(--line2) var(--bg2)}
-::-webkit-scrollbar{width:11px;height:11px}
-::-webkit-scrollbar-track{background:var(--bg2);border-radius:8px}
-::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--line2),var(--line));border-radius:8px;border:2px solid var(--bg2)}
-::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--acc),var(--acc2))}
-:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:6px}
-button,input,select,textarea{font-family:inherit;color:inherit}
-button{background:none;border:none;cursor:pointer}
-svg.ic{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.mono{font-family:var(--fm)}
-/* header */
-#top{position:fixed;top:0;left:0;right:0;height:var(--top);z-index:60;display:flex;align-items:center;gap:14px;padding:0 18px;
-  background:linear-gradient(180deg,rgba(11,16,23,.97),rgba(11,16,23,.9));backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-#top::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:4px;background:repeating-linear-gradient(-45deg,var(--acc) 0 9px,#121a24 9px 18px);opacity:.9}
-.brand{display:flex;align-items:center;gap:10px;flex:none}
-.brand svg{width:32px;height:32px}
-.brand .wm{font-family:var(--fd);font-weight:700;font-size:20px;letter-spacing:.06em;line-height:1}
-.brand .wm b{color:var(--acc)}
-.brand .tg{font-size:9px;letter-spacing:.17em;color:var(--dim);text-transform:uppercase;font-weight:600}
-#nav{display:flex;gap:2px;margin-left:8px;overflow-x:auto;scrollbar-width:none}
-#nav::-webkit-scrollbar{display:none}
-#nav a{flex:none;padding:7px 12px;border-radius:9px;font-family:var(--fd);font-weight:600;font-size:15px;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);text-decoration:none;transition:.16s;white-space:nowrap}
-#nav a:hover{color:var(--txt);background:var(--sur2)}
-#nav a.on{color:var(--acc);background:var(--accsoft)}
-.tr{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
-.icobtn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--sur);display:flex;align-items:center;justify-content:center;color:var(--mut);transition:.16s}
-.icobtn:hover{color:var(--acc);border-color:var(--line2);transform:translateY(-1px)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 15px;border-radius:11px;font-weight:600;font-size:14px;border:1px solid var(--line);background:var(--sur2);color:var(--txt);transition:.16s;min-height:42px;text-decoration:none}
-.btn:hover{border-color:var(--line2);transform:translateY(-1px)}
-.btn:active{transform:scale(.97)}
-.btn-acc{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--accink);border:none;box-shadow:0 4px 18px var(--accsoft)}
-.btn-acc:hover{filter:brightness(1.08)}
-.btn-gh{background:linear-gradient(135deg,var(--gh),var(--gh2));color:#fff;border:none;box-shadow:0 4px 18px var(--ghsoft)}
-.btn-gh:hover{filter:brightness(1.1)}
-.btn-sm{padding:7px 11px;min-height:34px;font-size:12.5px;border-radius:9px}
-.btn-ghost{background:transparent}
-.btn-block{width:100%}
-/* shell */
-#shell{position:relative;z-index:1;max-width:1560px;margin:0 auto;padding:calc(var(--top) + 26px) 18px 60px}
-section{margin-bottom:34px;scroll-margin-top:calc(var(--top) + 22px)}
-.sechead{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--line)}
-.sechead .num{font-family:var(--fm);font-size:11px;color:var(--sc,var(--acc));border:1px solid var(--sc,var(--acc));border-radius:6px;padding:3px 7px;font-weight:600}
-h1{font-family:var(--fd);font-weight:800;font-size:clamp(34px,5vw,54px);letter-spacing:.02em;line-height:.98;text-transform:uppercase}
-h1 em{font-style:normal;color:var(--acc)}
-h2{font-family:var(--fd);font-weight:700;font-size:26px;letter-spacing:.05em;text-transform:uppercase;line-height:1}
-h3{font-family:var(--fd);font-weight:600;font-size:18px;letter-spacing:.05em;text-transform:uppercase}
-.lead{color:var(--mut);font-size:16px;max-width:70ch;margin-top:10px}
-.card{background:linear-gradient(180deg,var(--sur2),var(--sur));border:1px solid var(--line);border-radius:var(--r);padding:17px;box-shadow:var(--sh)}
+body{font-family:system-ui,sans-serif;background:#0B1017;color:#E9EFF6;line-height:1.5}
+header{background:#141D28;border-bottom:3px solid #FFB020;padding:12px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:10}
+.logo{font-size:22px;font-weight:800;letter-spacing:.05em}
+.logo b{color:#FFB020}
+nav{display:flex;gap:8px;margin-left:20px;flex-wrap:wrap}
+nav a{color:#94A7BD;text-decoration:none;padding:6px 12px;border-radius:6px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+nav a:hover,nav a.on{color:#FFB020;background:rgba(255,176,32,.12)}
+.btn{padding:9px 16px;border-radius:9px;font-weight:700;font-size:13px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-acc{background:linear-gradient(135deg,#238636,#2EA043);color:#fff}
+.btn-acc:hover{filter:brightness(1.15)}
+.btn-ghost{background:#1A2532;color:#E9EFF6;border:1px solid #28374A}
+main{max-width:1400px;margin:0 auto;padding:20px}
+section{margin-bottom:30px}
+h1{font-size:32px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;margin-bottom:8px}
+h1 em{color:#FFB020;font-style:normal}
+h2{font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #28374A}
+.lead{color:#94A7BD;font-size:15px;max-width:70ch;margin-bottom:18px}
+.card{background:linear-gradient(180deg,#1A2532,#141D28);border:1px solid #28374A;border-radius:12px;padding:16px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.reveal{opacity:0;transform:translateY(20px)}
-.reveal.in{opacity:1;transform:none;transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.3,1)}
-/* hero */
-#hero{position:relative;overflow:hidden;border-radius:20px;border:1px solid var(--line);padding:28px;margin-bottom:26px;
-  background:linear-gradient(135deg,#16202C 0%,#101822 42%,#1A1D2E 100%)}
-#hero::before{content:"";position:absolute;inset:0;opacity:.5;background:
-  radial-gradient(420px 300px at 88% 12%,rgba(35,134,54,.28),transparent 65%),
-  radial-gradient(380px 280px at 12% 92%,var(--accsoft),transparent 65%),
-  radial-gradient(300px 220px at 60% 0%,rgba(76,154,255,.18),transparent 70%)}
-#hero>*{position:relative}
-.verdict{display:inline-flex;align-items:center;gap:9px;background:var(--ghsoft);border:1px solid rgba(35,134,54,.45);color:var(--green);padding:7px 14px;border-radius:999px;font-weight:700;font-size:13px;letter-spacing:.04em;margin-bottom:14px}
-.herostats{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.hs{background:rgba(10,15,21,.55);border:1px solid var(--line);border-radius:11px;padding:10px 14px;backdrop-filter:blur(6px)}
-.hs b{display:block;font-family:var(--fd);font-size:25px;line-height:1;color:var(--acc)}
-.hs span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-weight:600}
-/* repo tree */
-.tree{display:grid;grid-template-columns:320px minmax(0,1fr);gap:14px}
-.treebox{background:linear-gradient(180deg,var(--sur2),var(--sur));border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
-.treehd{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px;background:linear-gradient(180deg,var(--ov),var(--sur2))}
-.treehd .ic{color:var(--acc)}
-.treehd .repo{font-family:var(--fd);font-weight:700;font-size:19px;letter-spacing:.04em}
-.treehd .branch{margin-left:auto;font-family:var(--fm);font-size:11px;color:var(--mut);background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:3px 8px}
-.treebody{padding:8px;max-height:520px;overflow-y:auto}
-.trow{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:8px;font-family:var(--fm);font-size:12.5px;color:var(--mut);cursor:pointer;transition:.14s}
-.trow:hover{background:var(--sur2);color:var(--txt)}
-.trow.on{background:var(--accsoft);color:var(--acc);box-shadow:inset 2px 0 0 var(--acc)}
-.trow .ic{width:14px;height:14px;flex:none;color:var(--fc,var(--dim))}
-.trow .name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.trow .size{font-size:10.5px;color:var(--dim);flex:none}
-.trow.dir .ic{color:var(--blue)}
-.trow.file .ic{color:var(--acc)}
-.trow.doc .ic{color:var(--green)}
-.trow.code .ic{color:var(--violet)}
-.trow.data .ic{color:var(--teal)}
-.trow.yam .ic{color:var(--magenta)}
-.trow .indent{flex:none}
-.viewer{background:linear-gradient(180deg,var(--sur2),var(--sur));border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);display:flex;flex-direction:column}
-.vhead{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,var(--ov),var(--sur2));flex-wrap:wrap}
-.vhead .fp{font-family:var(--fm);font-size:12.5px;color:var(--txt);min-width:0;overflow:hidden;text-overflow:ellipsis}
-.vhead .lang{font-size:9.5px;font-weight:700;letter-spacing:.1em;color:var(--fc,var(--acc));border:1px solid currentColor;border-radius:5px;padding:2px 6px}
+.tree{display:grid;grid-template-columns:300px 1fr;gap:14px}
+.treebox,.viewer{background:linear-gradient(180deg,#1A2532,#141D28);border:1px solid #28374A;border-radius:12px;overflow:hidden}
+.treehd{padding:10px 14px;border-bottom:1px solid #28374A;font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px}
+.treebody{padding:6px;max-height:500px;overflow-y:auto}
+.trow{display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:7px;font-family:'Consolas',monospace;font-size:12px;color:#94A7BD;cursor:pointer}
+.trow:hover{background:#1A2532;color:#E9EFF6}
+.trow.on{background:rgba(255,176,32,.12);color:#FFB020}
+.trow.dir .ico{color:#4C9AFF}
+.trow.file .ico{color:#FFB020}
+.trow.doc .ico{color:#3DD68C}
+.trow .name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trow .size{font-size:10px;color:#61758C}
+.vhead{padding:10px 14px;border-bottom:1px solid #28374A;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.vhead .fp{font-family:'Consolas',monospace;font-size:12px;color:#E9EFF6}
+.vhead .lang{font-size:9px;font-weight:700;letter-spacing:.1em;color:#FFB020;border:1px solid #FFB020;border-radius:4px;padding:2px 6px}
 .vhead .acts{margin-left:auto;display:flex;gap:6px}
-.vdesc{padding:9px 14px;font-size:12.5px;color:var(--mut);border-bottom:1px solid var(--line);background:rgba(0,0,0,.15)}
-.code{flex:1;overflow:auto;max-height:520px;background:#0A0F16;position:relative}
-.code pre{margin:0;padding:14px 16px;font-family:var(--fm);font-size:12.2px;line-height:1.65;white-space:pre;tab-size:2}
-.code .ln{display:inline-block;width:34px;color:#3C4C60;user-select:none;text-align:right;padding-right:14px}
-.c-com{color:#5A7085;font-style:italic}.c-str{color:#8FE3A8}.c-key{color:#7FB4FF;font-weight:600}.c-num{color:#FFC53D}.c-fn{color:#F0A6D8}.c-var{color:#FFB020}.c-head{color:#FF7A2F;font-weight:700}
-/* kanban */
-.kbwrap{background:linear-gradient(180deg,var(--sur2),var(--sur));border:1px solid var(--line);border-radius:var(--r);padding:14px;box-shadow:var(--sh)}
-.kbhd{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-.kbhd .ic{color:var(--acc)}
-.kbhd .title{font-family:var(--fd);font-weight:700;font-size:22px;letter-spacing:.04em}
-.kbhd .sub{font-size:12px;color:var(--mut);margin-left:4px}
-.kbhd .acts{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
-.kbctrl{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
-.chips{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:none;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--sur);color:var(--mut);font-size:13px;font-weight:600;transition:.15s;min-height:34px;cursor:pointer}
-.chip:hover{color:var(--txt);border-color:var(--line2)}
-.chip.on{background:var(--acc);color:var(--accink);border-color:var(--acc)}
-.chip .n{font-family:var(--fm);font-size:11px;opacity:.75;margin-left:4px}
-.kb{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;overflow-x:auto;padding-bottom:4px}
-.col{background:var(--bg2);border:1px solid var(--line);border-radius:12px;min-height:320px;display:flex;flex-direction:column;min-width:220px}
-.colhd{padding:10px 11px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;background:linear-gradient(180deg,var(--sur2),var(--bg2));border-radius:12px 12px 0 0;position:sticky;top:0;z-index:1}
-.colhd .dot{width:10px;height:10px;border-radius:50%;background:var(--cc,var(--acc));box-shadow:0 0 8px var(--cc,var(--acc))}
-.colhd .nm{font-family:var(--fd);font-weight:700;font-size:15px;letter-spacing:.04em;text-transform:uppercase}
-.colhd .ct{margin-left:auto;font-family:var(--fm);font-size:11px;color:var(--dim);background:var(--sur);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
-.colbody{padding:8px;display:flex;flex-direction:column;gap:7px;flex:1;overflow-y:auto;max-height:560px}
-.kcard{background:var(--sur);border:1px solid var(--line);border-left:3px solid var(--cc,var(--acc));border-radius:10px;padding:10px 11px;cursor:pointer;transition:.16s;position:relative;animation:cardin .3s ease backwards;animation-delay:calc(var(--i,0)*35ms)}
-@keyframes cardin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.kcard:hover{border-color:var(--line2);border-left-color:var(--cc);transform:translateY(-2px);box-shadow:var(--sh)}
-.kcard .t{font-weight:600;font-size:13px;line-height:1.35;margin-bottom:5px;color:var(--txt)}
-.kcard .d{font-size:11.5px;color:var(--mut);line-height:1.4;margin-bottom:8px}
-.kcard .tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px}
-.kcard .tag{font-family:var(--fm);font-size:9.5px;font-weight:600;letter-spacing:.06em;padding:2px 6px;border-radius:5px;border:1px solid currentColor;white-space:nowrap}
-.kcard .meta{display:flex;align-items:center;gap:7px;font-family:var(--fm);font-size:10.5px;color:var(--dim)}
-.kcard .meta .ic{width:12px;height:12px}
-.kcard .meta b{color:var(--acc)}
-.kcard .prio{position:absolute;top:9px;right:9px;font-family:var(--fm);font-size:9.5px;font-weight:700;letter-spacing:.08em;padding:2px 6px;border-radius:5px}
-.prio.p1{background:var(--redsoft);color:var(--red);border:1px solid rgba(255,69,84,.4)}
-.prio.p2{background:var(--orangesoft);color:var(--orange);border:1px solid rgba(255,122,47,.4)}
-.prio.p3{background:var(--ambersoft);color:var(--amber);border:1px solid rgba(255,197,61,.4)}
-.prio.p4{background:var(--bluesoft);color:var(--blue);border:1px solid rgba(76,154,255,.4)}
-:root{--redsoft:rgba(255,69,84,.13);--orangesoft:rgba(255,122,47,.13);--ambersoft:rgba(255,197,61,.13);--bluesoft:rgba(76,154,255,.13)}
-/* fleet */
-.fleet{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.fleetsec{background:linear-gradient(180deg,var(--sur2),var(--sur));border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
-.fleetsec h3{display:flex;align-items:center;gap:9px;margin-bottom:12px}
-.fleetsec h3 .ic{color:var(--acc)}
-.fleetsec .sub{font-size:12px;color:var(--mut);font-weight:500;margin-left:auto;font-family:var(--fm);letter-spacing:.06em;text-transform:uppercase}
-.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;max-height:380px;overflow-y:auto}
-table.tb{width:100%;border-collapse:collapse;font-size:12.5px;min-width:520px}
-table.tb th{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-align:left;padding:9px 10px;border-bottom:1px solid var(--line2);background:var(--bg2);font-weight:700;white-space:nowrap;position:sticky;top:0;z-index:1}
-table.tb td{padding:8px 10px;border-bottom:1px solid var(--line);color:var(--mut);vertical-align:top}
-table.tb tr:last-child td{border:none}
-table.tb tr:hover td{background:rgba(255,255,255,.02)}
-table.tb b{color:var(--txt)}
-table.tb .mono{font-family:var(--fm);font-size:11.5px}
-table.tb .plate{font-family:var(--fm);font-size:11px;background:var(--bg2);border:1px solid var(--line);padding:2px 7px;border-radius:5px;color:var(--acc);letter-spacing:.08em}
-table.tb .state{font-size:9.5px;font-weight:700;letter-spacing:.1em;padding:3px 7px;border-radius:5px;display:inline-block}
-.state.op{background:var(--green);color:#04150C}
-.state.inop{background:var(--red);color:#fff}
-.state.dor{background:var(--blue);color:#04150C}
-.state.pm{background:var(--amber);color:#1A1206}
-.fleetacts{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
-/* modal */
-#modalWrap{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(5,9,14,.66);backdrop-filter:blur(3px)}
-#modalWrap.on{display:flex}
-#modal{width:min(720px,100%);max-height:92dvh;overflow-y:auto;background:var(--bg2);border:1px solid var(--line2);border-radius:18px;padding:20px;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:mup .28s cubic-bezier(.3,.9,.3,1)}
-@keyframes mup{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
-.mhead{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.mhead h2{font-size:22px}
-.mhead .x{margin-left:auto}
-.mfoot{display:flex;gap:9px;margin-top:16px}
+.vdesc{padding:8px 14px;font-size:12px;color:#94A7BD;border-bottom:1px solid #28374A}
+.code{max-height:500px;overflow:auto;background:#0A0F16;padding:12px;font-family:'Consolas',monospace;font-size:11.5px;line-height:1.6;white-space:pre;color:#E9EFF6}
+.kb{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;overflow-x:auto}
+.col{background:#0F1620;border:1px solid #28374A;border-radius:10px;min-height:280px}
+.colhd{padding:9px 10px;border-bottom:1px solid #28374A;display:flex;align-items:center;gap:7px}
+.colhd .dot{width:9px;height:9px;border-radius:50%}
+.colhd .nm{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+.colhd .ct{margin-left:auto;font-family:'Consolas',monospace;font-size:10px;color:#61758C;background:#141D28;padding:2px 6px;border-radius:5px}
+.colbody{padding:7px;display:flex;flex-direction:column;gap:6px}
+.kcard{background:#141D28;border:1px solid #28374A;border-left:3px solid var(--cc,#FFB020);border-radius:8px;padding:9px;cursor:pointer}
+.kcard:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.kcard .t{font-weight:600;font-size:12px;margin-bottom:4px}
+.kcard .d{font-size:11px;color:#94A7BD;margin-bottom:6px;line-height:1.4}
+.kcard .tags{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:5px}
+.kcard .tag{font-family:'Consolas',monospace;font-size:9px;font-weight:600;padding:1px 5px;border-radius:4px;border:1px solid currentColor}
+.kcard .meta{font-family:'Consolas',monospace;font-size:10px;color:#61758C;display:flex;gap:5px}
+.prio{position:absolute;top:7px;right:7px;font-family:'Consolas',monospace;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px}
+.prio.p1{background:rgba(255,69,84,.2);color:#FF4554}
+.prio.p2{background:rgba(255,122,47,.2);color:#FF7A2F}
+.prio.p3{background:rgba(255,197,61,.2);color:#FFC53D}
+.prio.p4{background:rgba(76,154,255,.2);color:#4C9AFF}
+.kcard{position:relative}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#0F1620;color:#61758C;font-size:9px;letter-spacing:.1em;text-transform:uppercase;text-align:left;padding:7px 9px;border-bottom:1px solid #28374A;position:sticky;top:0}
+td{padding:7px 9px;border-bottom:1px solid #28374A;color:#94A7BD}
+tr:hover td{background:rgba(255,255,255,.02)}
+td b{color:#E9EFF6}
+.plate{font-family:'Consolas',monospace;font-size:10px;background:#0F1620;border:1px solid #28374A;padding:2px 6px;border-radius:4px;color:#FFB020}
+.state{font-size:9px;font-weight:700;letter-spacing:.08em;padding:2px 6px;border-radius:4px;display:inline-block}
+.state.op{background:#3DD68C;color:#04150C}
+.state.inop{background:#FF4554;color:#fff}
+.state.dor{background:#4C9AFF;color:#04150C}
+.tblwrap{overflow:auto;max-height:360px;border:1px solid #28374A;border-radius:8px}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.stat{background:rgba(10,15,21,.6);border:1px solid #28374A;border-radius:9px;padding:8px 12px}
+.stat b{display:block;font-size:22px;color:#FFB020;font-weight:800}
+.stat span{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#94A7BD;font-weight:600}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chip{padding:5px 11px;border-radius:999px;border:1px solid #28374A;background:#141D28;color:#94A7BD;font-size:12px;font-weight:600;cursor:pointer}
+.chip.on{background:#FFB020;color:#1A1206;border-color:#FFB020}
+.chip .n{font-family:'Consolas',monospace;font-size:10px;margin-left:3px;opacity:.7}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:100;padding:18px}
+.modal-bg.on{display:flex}
+.modal{width:min(600px,100%);max-height:90vh;overflow-y:auto;background:#141D28;border:1px solid #28374A;border-radius:14px;padding:18px}
+.modal h3{font-size:18px;margin-bottom:12px}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#94A7BD;font-weight:700;margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;background:#0F1620;border:1px solid #28374A;border-radius:7px;padding:8px 10px;color:#E9EFF6;font-size:13px}
+.field textarea{min-height:60px;resize:vertical}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mfoot{display:flex;gap:8px;margin-top:14px}
 .mfoot .btn{flex:1}
-.field{margin-bottom:13px}
-.field label{display:block;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:var(--mut);margin-bottom:6px}
-.field input,.field select,.field textarea{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:15px;min-height:46px;color-scheme:dark;transition:.15s}
-.field textarea{min-height:74px;resize:vertical;font-size:13.5px;font-family:var(--fm)}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--acc);outline:none;box-shadow:0 0 0 3px var(--accsoft)}
-.field .hint{font-size:11.5px;color:var(--dim);margin-top:5px}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-/* toast */
-#toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;z-index:90;display:flex;flex-direction:column-reverse;gap:8px;width:min(460px,calc(100% - 24px));pointer-events:none}
-.toast{pointer-events:auto;display:flex;align-items:center;gap:10px;background:var(--ov);border:1px solid var(--line2);border-left:4px solid var(--tc,var(--acc));border-radius:12px;padding:11px 14px;box-shadow:var(--sh);animation:tin .3s cubic-bezier(.3,.9,.3,1);position:relative;overflow:hidden;font-size:13.5px}
-@keyframes tin{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
-.toast.out{animation:tout .24s ease forwards}
-@keyframes tout{to{opacity:0;transform:translateY(10px) scale(.96)}}
-.toast .ic{color:var(--tc)}
-.toast .tm{flex:1}
-.toast .tp{position:absolute;left:0;bottom:0;height:2px;background:var(--tc);animation:tp linear forwards}
-@keyframes tp{from{width:100%}to{width:0}}
-footer{position:relative;z-index:1;max-width:1560px;margin:0 auto;padding:18px;border-top:1px solid var(--line);color:var(--dim);font-size:11.5px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-@media (max-width:1100px){.kb{grid-template-columns:repeat(3,minmax(220px,1fr))}.tree{grid-template-columns:1fr}.fleet{grid-template-columns:1fr}}
-@media (max-width:720px){.kb{grid-template-columns:1fr}.grid2,.grid3,.grid4{grid-template-columns:1fr}#nav{display:none}.brand .tg{display:none}h1{font-size:32px}.frow{grid-template-columns:1fr}}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#212E3D;border:1px solid #3A4E66;border-left:4px solid var(--tc,#FFB020);border-radius:10px;padding:10px 14px;font-size:13px;z-index:200;animation:tin .3s}
+@keyframes tin{from{opacity:0;transform:translateX(-50%) translateY(14px)}to{opacity:1;transform:translateX(-50%)}}
+footer{max-width:1400px;margin:0 auto;padding:14px;border-top:1px solid #28374A;color:#61758C;font-size:11px;display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:900px){.tree,.grid2{grid-template-columns:1fr}.kb{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.kb{grid-template-columns:1fr}nav{display:none}.frow{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<svg style="display:none">
-<symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5l5 5L19.5 7"/></symbol>
-<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
-<symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.2 5.2l2.1 2.1M16.7 16.7l2.1 2.1M18.8 5.2l-2.1 2.1M7.3 16.7l-2.1 2.1"/></symbol>
-<symbol id="i-snd" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16 9.5a3.5 3.5 0 0 1 0 5M18.5 7a7 7 0 0 1 0 10"/></symbol>
-<symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16.5 9.5l5 5M21.5 9.5l-5 5"/></symbol>
-<symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3v11M7.5 10L12 14.5 16.5 10M4 17v3h16v-3"/></symbol>
-<symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
-<symbol id="i-zip" viewBox="0 0 24 24"><path d="M6 2h8l4 4v16H6zM14 2v4h4"/><path d="M10 4h2M10 7h2M10 10h2M10 13h2M9 16h4v4H9z"/></symbol>
-<symbol id="i-code" viewBox="0 0 24 24"><path d="M8.5 8L4 12l4.5 4M15.5 8l4.5 4-4.5 4M13.5 5l-3 14"/></symbol>
-<symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
-<symbol id="i-kanban" viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="10" rx="1"/><rect x="17" y="4" width="4" height="13" rx="1"/></symbol>
-<symbol id="i-truck" viewBox="0 0 32 24"><rect x="2.5" y="4.5" width="9" height="12" rx="1.2"/><path d="M4.5 8h5M11.5 10.5h6.5l3 3v3M2.5 16.5h27"/><circle cx="6.5" cy="18.6" r="2.3"/><circle cx="19" cy="18.6" r="2.3"/><circle cx="25" cy="18.6" r="2.3"/></symbol>
-<symbol id="i-trailer" viewBox="0 0 32 24"><path d="M3.5 5.5h25l-2.5 8.5H6z"/><path d="M3.5 14h25M8.5 14v4M6.5 18h4M2 10h1.5"/><circle cx="17" cy="18.4" r="2.2"/><circle cx="22.2" cy="18.4" r="2.2"/><circle cx="27.4" cy="18.4" r="2.2"/></symbol>
-<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-<symbol id="i-file" viewBox="0 0 24 24"><path d="M6 2h8l4 4v16H6zM14 2v4h4"/></symbol>
-<symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
-<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5h.01"/></symbol>
-<symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3L2.5 20h19zM12 9.5v5M12 17.5h.01"/></symbol>
-<symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L20 8l-4-4L4 16zM13.5 6.5l4 4"/></symbol>
-<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6.5 7l1 13h9l1-13"/></symbol>
-<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
-<symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h13l-2.5 4L18 12H5"/></symbol>
-<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></symbol>
-<symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></symbol>
-<symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 4h18l-7 9v7l-4-2v-5z"/></symbol>
-<symbol id="i-gh" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-2c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.8v2.7c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></symbol>
-<symbol id="i-issue" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/></symbol>
-<symbol id="i-pr" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="12" r="3"/><path d="M6 9v6M9 6h6a3 3 0 0 1 3 3"/></symbol>
-</svg>
-
-<header id="top">
-  <div class="brand">
-    <svg viewBox="0 0 40 40"><path d="M20 3l14.7 8.5v17L20 37 5.3 28.5v-17z" fill="none" stroke="var(--acc)" stroke-width="2.4"/><path d="M13 26V14h6M13 20h5M23 26V14l4 6 4-6v12" fill="none" stroke="var(--txt)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <div><div class="wm">TALLER<b>FM</b> · GitHub</div><div class="tg">Repo · Kanban · Base de flota</div></div>
-  </div>
-  <nav id="nav">
-    <a href="#sec-repo" data-sec="sec-repo">Repositorio</a>
-    <a href="#sec-kanban" data-sec="sec-kanban">Kanban</a>
-    <a href="#sec-flota" data-sec="sec-flota">Base de flota</a>
-    <a href="#sec-issues" data-sec="sec-issues">Issues</a>
-    <a href="#sec-workflow" data-sec="sec-workflow">Flujo</a>
+<header>
+  <div class="logo">TALLER<b>FM</b> · GitHub</div>
+  <nav>
+    <a href="#sec-repo" class="on">Repositorio</a>
+    <a href="#sec-kanban">Kanban</a>
+    <a href="#sec-flota">Base de flota</a>
+    <a href="#sec-issues">Issues</a>
+    <a href="#sec-workflow">Flujo</a>
   </nav>
-  <div class="tr">
-    <button class="icobtn" id="sndBtn" title="Silenciar sonidos" aria-pressed="true"><svg class="ic"><use href="#i-snd"/></svg></button>
-    <button class="btn btn-gh btn-sm" id="kitBtn"><svg class="ic" style="width:16px;height:16px"><use href="#i-zip"/></svg>Kit .zip</button>
+  <div style="margin-left:auto;display:flex;gap:8px">
+    <button class="btn btn-acc" id="kitBtn">⬇ Kit .zip</button>
   </div>
 </header>
+<main>
+  <section id="hero" style="margin-bottom:26px">
+    <div style="background:linear-gradient(135deg,#16202C,#101822);border:1px solid #28374A;border-radius:14px;padding:24px">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(35,134,54,.15);border:1px solid rgba(35,134,54,.4);color:#3DD68C;padding:5px 12px;border-radius:999px;font-weight:700;font-size:12px;margin-bottom:12px">✓ Repo listo · Kanban operativo · Base de flota cargada</div>
+      <h1>De una hoja HTML<br>a un <em>proyecto GitHub</em></h1>
+      <p class="lead">Estructura el repo con carpetas claras, un tablero Kanban con columnas específicas para <b>cambios de estado operativo ↔ inoperativo</b>, y una base de flota que separa <b>camiones tracto</b> de <b>portacontenedores remolque</b>.</p>
+      <div class="stats" id="heroStats"></div>
+    </div>
+  </section>
 
-<div id="shell">
-  <div id="hero">
-    <div class="verdict"><svg class="ic"><use href="#i-gh"/></svg>Repositorio listo · Kanban operativo · Base de flota cargada</div>
-    <h1>De una hoja HTML<br>a un <em>proyecto GitHub</em> corporativo</h1>
-    <p class="lead">Estructura el repo con carpetas claras, un tablero Kanban con columnas específicas para <b>cambios de estado operativo ↔ inoperativo</b>, y una base de flota que separa <b>camiones tracto</b> de <b>portacontenedores remolque</b> con todas sus características. Todo se puede descargar como kit ejecutable.</p>
-    <div class="herostats" id="heroStats"></div>
-  </div>
-
-  <section id="sec-repo" class="reveal" style="--sect:var(--acc)">
-    <div class="sechead"><span class="num">01</span><h2>Estructura del repositorio</h2><span style="color:var(--mut);font-size:13px">Haz clic en cualquier archivo para ver su contenido</span></div>
+  <section id="sec-repo">
+    <h2>01 · Estructura del repositorio</h2>
     <div class="tree">
       <div class="treebox">
-        <div class="treehd"><svg class="ic"><use href="#i-gh"/></svg><span class="repo">taller-fm</span><span class="branch">main</span></div>
+        <div class="treehd">📁 taller-fm <span style="margin-left:auto;font-family:Consolas,monospace;font-size:11px;color:#61758C">main</span></div>
         <div class="treebody" id="treeList"></div>
       </div>
       <div class="viewer">
-        <div class="vhead"><span class="lang" id="vLang">—</span><span class="fp mono" id="vPath">—</span>
-          <div class="acts"><button class="btn btn-sm" id="copyFile"><svg class="ic" style="width:15px;height:15px"><use href="#i-copy"/></svg>Copiar</button><button class="btn btn-sm" id="dlFile"><svg class="ic" style="width:15px;height:15px"><use href="#i-down"/></svg>Descargar</button></div>
-        </div>
-        <div class="vdesc" id="vDesc">Selecciona un archivo del árbol.</div>
-        <div class="code"><pre id="vCode"></pre></div>
+        <div class="vhead"><span class="lang" id="vLang">—</span><span class="fp" id="vPath">—</span><div class="acts"><button class="btn btn-ghost" id="copyFile">📋 Copiar</button><button class="btn btn-ghost" id="dlFile">⬇ Descargar</button></div></div>
+        <div class="vdesc" id="vDesc">Selecciona un archivo.</div>
+        <div class="code" id="vCode"></div>
       </div>
     </div>
   </section>
 
-  <section id="sec-kanban" class="reveal" style="--sect:var(--gh)">
-    <div class="sechead"><span class="num">02</span><h2>Tablero Kanban · GitHub Projects</h2><span style="color:var(--mut);font-size:13px">Columnas específicas para cambios de estado operativo</span></div>
-    <div class="kbwrap">
-      <div class="kbhd">
-        <svg class="ic"><use href="#i-kanban"/></svg>
-        <span class="title">TALLER FM · Operación diaria</span>
-        <span class="sub">GitHub Projects · 6 columnas</span>
-        <div class="acts">
-          <button class="btn btn-sm" id="kbFilter" data-filter="todos"><svg class="ic" style="width:15px;height:15px"><use href="#i-filter"/></svg>Filtrar</button>
-          <button class="btn btn-sm" id="kbAdd"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>Nueva tarjeta</button>
-          <button class="btn btn-sm btn-acc" id="kbExport"><svg class="ic" style="width:15px;height:15px"><use href="#i-down"/></svg>Exportar</button>
+  <section id="sec-kanban">
+    <h2>02 · Tablero Kanban · GitHub Projects</h2>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+        <span style="font-weight:700;font-size:18px;text-transform:uppercase;letter-spacing:.04em">TALLER FM · Operación diaria</span>
+        <span style="font-size:11px;color:#94A7BD;margin-left:4px">6 columnas</span>
+        <div style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn btn-ghost" id="kbAdd">＋ Nueva tarjeta</button>
+          <button class="btn btn-ghost" id="kbExport">⬇ Exportar CSV</button>
         </div>
       </div>
-      <div class="kbctrl" id="kbChips"></div>
+      <div class="chips" id="kbChips"></div>
       <div class="kb" id="kbBoard"></div>
     </div>
   </section>
 
-  <section id="sec-flota" class="reveal" style="--sect:var(--teal)">
-    <div class="sechead"><span class="num">03</span><h2>Base de flota</h2><span style="color:var(--mut);font-size:13px">Camiones tracto y portacontenedores remolque, independientes</span></div>
-    <div class="fleet">
-      <div class="fleetsec">
-        <h3><svg class="ic"><use href="#i-truck"/></svg>Camiones tracto Volvo FM<span class="sub" id="tractoCount">0 unidades</span></h3>
-        <div class="tblwrap"><table class="tb" id="tractoTable"></table></div>
-        <div class="fleetacts">
-          <button class="btn btn-sm btn-acc" data-add="tracto"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>Agregar tracto</button>
-          <button class="btn btn-sm" data-csv="tracto"><svg class="ic" style="width:15px;height:15px"><use href="#i-down"/></svg>CSV tractos</button>
-        </div>
-      </div>
-      <div class="fleetsec">
-        <h3><svg class="ic"><use href="#i-trailer"/></svg>Portacontenedores remolque<span class="sub" id="remolqueCount">0 unidades</span></h3>
-        <div class="tblwrap"><table class="tb" id="remolqueTable"></table></div>
-        <div class="fleetacts">
-          <button class="btn btn-sm btn-acc" data-add="remolque"><svg class="ic" style="width:15px;height:15px"><use href="#i-plus"/></svg>Agregar remolque</button>
-          <button class="btn btn-sm" data-csv="remolque"><svg class="ic" style="width:15px;height:15px"><use href="#i-down"/></svg>CSV remolques</button>
-        </div>
-      </div>
-    </div>
-    <div class="card" style="margin-top:14px">
-      <h3 style="margin-bottom:10px">Campos disponibles por tipo de unidad</h3>
-      <div class="grid2">
-        <div>
-          <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:7px">Camiones tracto</div>
-          <div style="font-size:12.5px;color:var(--mut);line-height:1.7">
-            <span class="mono" style="color:var(--txt)">id</span> · <span class="mono" style="color:var(--txt)">placa</span> · <span class="mono" style="color:var(--txt)">vin</span> · <span class="mono" style="color:var(--txt)">modelo</span> · <span class="mono" style="color:var(--txt)">motor</span> · <span class="mono" style="color:var(--txt)">transmision</span> · <span class="mono" style="color:var(--txt)">configuracion_ejes</span> · <span class="mono" style="color:var(--txt)">anio</span> · <span class="mono" style="color:var(--txt)">km_actual</span> · <span class="mono" style="color:var(--txt)">proximo_pm_km</span> · <span class="mono" style="color:var(--txt)">conjunto</span> · <span class="mono" style="color:var(--txt)">conductor_asignado</span> · <span class="mono" style="color:var(--txt)">estado</span>
-          </div>
-        </div>
-        <div>
-          <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:7px">Portacontenedores remolque</div>
-          <div style="font-size:12.5px;color:var(--mut);line-height:1.7">
-            <span class="mono" style="color:var(--txt)">id</span> · <span class="mono" style="color:var(--txt)">placa</span> · <span class="mono" style="color:var(--txt)">vin</span> · <span class="mono" style="color:var(--txt)">tipo_chasis</span> · <span class="mono" style="color:var(--txt)">capacidad_teu</span> · <span class="mono" style="color:var(--txt)">capacidad_toneladas</span> · <span class="mono" style="color:var(--txt)">ejes</span> · <span class="mono" style="color:var(--txt)">largoxancho</span> · <span class="mono" style="color:var(--txt)">anio</span> · <span class="mono" style="color:var(--txt)">tara_kg</span> · <span class="mono" style="color:var(--txt)">quinta_rueda</span> · <span class="mono" style="color:var(--txt)">frenos_tipo</span> · <span class="mono" style="color:var(--txt)">suspension</span> · <span class="mono" style="color:var(--txt)">conjunto</span> · <span class="mono" style="color:var(--txt)">estado</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="sec-issues" class="reveal" style="--sect:var(--magenta)">
-    <div class="sechead"><span class="num">04</span><h2>Templates de Issues</h2><span style="color:var(--mut);font-size:13px">Formularios estandarizados para cambios de estado</span></div>
+  <section id="sec-flota">
+    <h2>03 · Base de flota</h2>
     <div class="grid2">
       <div class="card">
-        <h3 style="margin-bottom:10px;color:var(--red)"><svg class="ic"><use href="#i-warn"/></svg>Cambio a INOPERATIVO</h3>
-        <p style="font-size:13px;color:var(--mut);margin-bottom:10px">Cuando una unidad sale de servicio por falla, PM o siniestro.</p>
-        <div class="code" style="max-height:220px"><pre id="tplInop"></pre></div>
+        <h3 style="margin-bottom:10px">🚛 Camiones tracto Volvo FM <span style="font-size:11px;color:#94A7BD;font-weight:500;margin-left:8px" id="tractoCount">0</span></h3>
+        <div class="tblwrap"><table id="tractoTable"></table></div>
+        <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn btn-acc" data-add="tracto">＋ Agregar tracto</button>
+          <button class="btn btn-ghost" data-csv="tracto">⬇ CSV</button>
+        </div>
       </div>
       <div class="card">
-        <h3 style="margin-bottom:10px;color:var(--green)"><svg class="ic"><use href="#i-check"/></svg>Cambio a OPERATIVO</h3>
-        <p style="font-size:13px;color:var(--mut);margin-bottom:10px">Cuando la unidad se libera y vuelve a ruta/faena.</p>
-        <div class="code" style="max-height:220px"><pre id="tplOp"></pre></div>
-      </div>
-      <div class="card">
-        <h3 style="margin-bottom:10px;color:var(--blue)"><svg class="ic"><use href="#i-clock"/></svg>Retención DOR</h3>
-        <p style="font-size:13px;color:var(--mut);margin-bottom:10px">Unidad operativa pero retenida en taller (sin conductor, sin ruta, etc.).</p>
-        <div class="code" style="max-height:220px"><pre id="tplDor"></pre></div>
-      </div>
-      <div class="card">
-        <h3 style="margin-bottom:10px;color:var(--amber)"><svg class="ic"><use href="#i-flag"/></svg>Mantenimiento programado</h3>
-        <p style="font-size:13px;color:var(--mut);margin-bottom:10px">PM planificado con fecha de ingreso y salida estimada.</p>
-        <div class="code" style="max-height:220px"><pre id="tplPm"></pre></div>
+        <h3 style="margin-bottom:10px">🚚 Portacontenedores remolque <span style="font-size:11px;color:#94A7BD;font-weight:500;margin-left:8px" id="remolqueCount">0</span></h3>
+        <div class="tblwrap"><table id="remolqueTable"></table></div>
+        <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn btn-acc" data-add="remolque">＋ Agregar remolque</button>
+          <button class="btn btn-ghost" data-csv="remolque">⬇ CSV</button>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="sec-workflow" class="reveal" style="--sect:var(--violet)">
-    <div class="sechead"><span class="num">05</span><h2>Flujo de trabajo en GitHub</h2><span style="color:var(--mut);font-size:13px">Cómo usar el repo día a día</span></div>
-    <div class="grid3">
-      <div class="card">
-        <h3 style="margin-bottom:10px;color:var(--acc)">1. Crear el repo</h3>
-        <p style="font-size:13px;color:var(--mut);margin-bottom:10px">Sube el kit al repo <span class="mono" style="color:var(--acc)">taller-fm</span> con la estructura de carpetas mostrada arriba.</p>
-        <div class="code" style="max-height:120px"><pre>git init
-git add .
-git commit -m "init: estructura base TALLER FM"
-git branch -M main
-git remote add origin https://github.com/TU-USUARIO/taller-fm.git
-git push -u origin main</pre></div>
-      </div>
-      <div class="card">
-        <h3 style="margin-bottom:10px;color:var(--gh)">2. Activar Projects</h3>
-        <p style="font-size:13px;color:var(--mut);margin-bottom:10px">GitHub → Projects → New project → Board. Crea las 6 columnas del Kanban y vincula el repo.</p>
-        <div class="code" style="max-height:120px"><pre>Columnas:
-· Backlog
-· Planificado
-· En desarrollo
-· En revisión
-· Listo para deploy
-· Completado</pre></div>
-      </div>
-      <div class="card">
-        <h3 style="margin-bottom:10px;color:var(--teal)">3. Cargar la flota</h3>
-        <p style="font-size:13px;color:var(--mut);margin-bottom:10px">Edita <span class="mono" style="color:var(--acc)">data/flota/tractos.json</span> y <span class="mono" style="color:var(--acc)">remolques.json</span> con tus unidades reales.</p>
-        <div class="code" style="max-height:120px"><pre>data/flota/tractos.json
+  <section id="sec-issues">
+    <h2>04 · Templates de Issues</h2>
+    <div class="grid2">
+      <div class="card"><h3 style="color:#FF4554;margin-bottom:8px">⚠ Cambio a INOPERATIVO</h3><div class="code" style="max-height:200px" id="tplInop"></div></div>
+      <div class="card"><h3 style="color:#3DD68C;margin-bottom:8px">✓ Cambio a OPERATIVO</h3><div class="code" style="max-height:200px" id="tplOp"></div></div>
+      <div class="card"><h3 style="color:#4C9AFF;margin-bottom:8px">🕐 Retención DOR</h3><div class="code" style="max-height:200px" id="tplDor"></div></div>
+      <div class="card"><h3 style="color:#FFC53D;margin-bottom:8px">🔧 Mantenimiento programado</h3><div class="code" style="max-height:200px" id="tplPm"></div></div>
+    </div>
+  </section>
+
+  <section id="sec-workflow">
+    <h2>05 · Flujo de trabajo</h2>
+    <div class="grid2">
+      <div class="card"><h3 style="color:#FFB020;margin-bottom:8px">1. Crear el repo</h3><p style="font-size:13px;color:#94A7BD;margin-bottom:8px">Sube el kit al repo <span style="font-family:Consolas,monospace;color:#FFB020">TALLER-APU</span>.</p><div class="code" style="max-height:100px">git init && git add . && git commit -m "init"
+git remote add origin https://github.com/APU-MANTENIMIENTO/TALLER-APU.git
+git push -u origin main</div></div>
+      <div class="card"><h3 style="color:#238636;margin-bottom:8px">2. Activar Projects</h3><p style="font-size:13px;color:#94A7BD;margin-bottom:8px">GitHub → Projects → New project → Board. Crea las 6 columnas.</p><div class="code" style="max-height:100px">Columnas:
+· Backlog · Planificado · En desarrollo
+· En revisión · Listo para deploy · Completado</div></div>
+      <div class="card"><h3 style="color:#2DD4BF;margin-bottom:8px">3. Cargar la flota</h3><p style="font-size:13px;color:#94A7BD;margin-bottom:8px">Edita <span style="font-family:Consolas,monospace;color:#FFB020">data/flota/tractos.json</span> y <span style="font-family:Consolas,monospace;color:#FFB020">remolques.json</span>.</p><div class="code" style="max-height:100px">data/flota/tractos.json
 data/flota/remolques.json
 data/catalogo/causas.json
-data/catalogo/estados.json</pre></div>
-      </div>
-      <div class="card">
-        <h3 style="margin-bottom:10px;color:var(--magenta)">4. Registrar cambios de estado</h3>
-        <p style="font-size:13px;color:var(--mut);margin-bottom:10px">Crea un Issue con el template correspondiente. El Kanban lo mueve automáticamente según las labels.</p>
-        <div class="code" style="max-height:120px"><pre>Labels:
-· estado:inoperativo
-· estado:operativo
-· estado:dor
-· estado:pm
-· tipo:falla
-· tipo:pm
-· tipo:logistica
-· prioridad:p1/p2/p3/p4</pre></div>
-      </div>
-      <div class="card">
-        <h3 style="margin-bottom:10px;color:var(--violet)">5. Desarrollar mejoras</h3>
-        <p style="font-size:13px;color:var(--mut);margin-bottom:10px">Crea una rama por cada issue, desarrolla, abre un Pull Request y mergea a main.</p>
-        <div class="code" style="max-height:120px"><pre>git checkout -b feature/nueva-funcionalidad
-# desarrolla
-git add .
-git commit -m "feat: nueva funcionalidad (#12)"
-git push origin feature/nueva-funcionalidad
-# abre PR en GitHub</pre></div>
-      </div>
-      <div class="card">
-        <h3 style="margin-bottom:10px;color:var(--blue)">6. Desplegar</h3>
-        <p style="font-size:13px;color:var(--mut);margin-bottom:10px">El workflow de GitHub Actions publica automáticamente en GitHub Pages al mergear a main.</p>
-        <div class="code" style="max-height:120px"><pre>.github/workflows/deploy.yml
-# se ejecuta en cada push a main
-# publica en:
-# https://TU-USUARIO.github.io/taller-fm/</pre></div>
-      </div>
+data/catalogo/estados.json</div></div>
+      <div class="card"><h3 style="color:#F472B6;margin-bottom:8px">4. Registrar cambios</h3><p style="font-size:13px;color:#94A7BD;margin-bottom:8px">Crea un Issue con el template. El Kanban lo mueve según labels.</p><div class="code" style="max-height:100px">Labels:
+· estado:inoperativo · estado:operativo
+· estado:dor · estado:pm
+· prioridad:p1/p2/p3/p4</div></div>
     </div>
   </section>
-</div>
-
+</main>
 <footer>
-  <svg class="ic" style="width:14px;height:14px"><use href="#i-gh"/></svg>
   <span>Kit completo: estructura de repo, Kanban con 6 columnas, templates de issues, base de flota (tractos + remolques) y workflow de despliegue.</span>
-  <span class="mono" style="margin-left:auto" id="footStamp"></span>
+  <span style="margin-left:auto;font-family:Consolas,monospace" id="footStamp"></span>
 </footer>
 
-<div id="modalWrap" data-act="close-modal-bg"><div id="modal" role="dialog" aria-modal="true"></div></div>
-<div id="toasts" aria-live="polite"></div>
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
 
 <script>
-'use strict';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const pad=n=>String(n).padStart(2,'0');
-const icon=(i,st='')=>`<svg class="ic" ${st?`style="${st}"`:''}><use href="#${i}"/></svg>`;
 
-/* ---------- sonido ---------- */
-let AC=null;
-const ac=()=>{if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC};
-function snd(k){if(!soundOn)return;const c=ac();if(!c)return;const t=c.currentTime;
-  const n=(f,tt,d,ty='sine',v=.05)=>{const o=c.createOscillator(),g=c.createGain();o.type=ty;o.frequency.value=f;g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(v,tt+.012);g.gain.exponentialRampToValueAtTime(.0001,tt+d);o.connect(g);g.connect(c.destination);o.start(tt);o.stop(tt+d+.02)};
-  if(k==='tick')n(680,t,.05,'square',.022);
-  else if(k==='ok'){n(523,t,.11);n(784,t+.08,.15)}
-  else if(k==='zip'){n(392,t,.09);n(587,t+.07,.1);n(880,t+.15,.18)}
-  else if(k==='err'){n(190,t,.18,'square',.04)}}
-let soundOn=true;
-function toast(m,k='info',ms=4200){
-  const col={ok:'var(--green)',warn:'var(--amber)',err:'var(--red)',info:'var(--blue)'}[k];
-  const ic={ok:'i-check',warn:'i-warn',err:'i-x',info:'i-info'}[k];
-  const el=document.createElement('div');el.className='toast';el.style.setProperty('--tc',col);
-  el.innerHTML=`${icon(ic)}<div class="tm">${esc(m)}</div><i class="tp" style="animation-duration:${ms}ms"></i>`;
-  const r=$('#toasts');r.appendChild(el);while(r.children.length>3)r.firstChild.remove();
-  setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),240)},ms);
-}
-
-/* ---------- estructura del repo ---------- */
 const FILES={
-  'README.md':{desc:'Documentación principal del proyecto: objetivo, arquitectura, instalación y uso.',lang:'md',content:`# TALLER FM · Sistema de gestión de mantenimiento
+'README.md':{desc:'Documentación principal del proyecto.',lang:'md',content:`# TALLER FM · Sistema de gestión de mantenimiento
 
-Sistema de seguimiento diario del estatus de taller para flota Volvo FM (camiones tracto) y semirremolques portacontenedores, con cálculo automático de días inoperativos, ciclo 21→21 y separación de DI técnico / DI gestión / DOR.
+Sistema de seguimiento diario del estatus de taller para flota Volvo FM y semirremolques portacontenedores.
 
 ## Arquitectura
-
 \`\`\`
 taller-fm/
-├── app/                    # Aplicación web (HTML + JS + CSS)
-├── data/                   # Datos de flota y catálogo
-│   ├── flota/              # Tractos y remolques
-│   └── catalogo/           # Causas y estados
-├── docs/                   # Documentación técnica
-├── scripts/                # Scripts de aprovisionamiento
-├── .github/                # Workflows y templates
-│   ├── workflows/          # CI/CD
-│   └── ISSUE_TEMPLATE/     # Formularios de issues
-└── tests/                  # Pruebas automatizadas
+├── app/          # Aplicación web (HTML + JS + CSS)
+├── data/         # Datos de flota y catálogo
+│   ├── flota/    # Tractos y remolques
+│   └── catalogo/ # Causas y estados
+├── docs/         # Documentación técnica
+├── scripts/      # Scripts de aprovisionamiento
+└── .github/      # Workflows y templates
 \`\`\`
 
 ## Características
-
 - **Conteo de días al corte**: un día cuenta si el estado persistía a las 07:00
-- **Ciclo 21→21**: acumulación mensual del 21 al 20 (o 21 inclusive)
+- **Ciclo 21→21**: acumulación mensual del 21 al 20
 - **Separación DI/DOR**: distingue indisponibilidad técnica de retención operativa
 - **Base de flota independiente**: camiones tracto y remolques por separado
-- **Kanban operativo**: seguimiento de cambios de estado con templates de issues
+- **Kanban operativo**: seguimiento de cambios de estado
 - **Multiusuario**: datos compartidos vía SharePoint o API de Azure
-- **Power BI**: tablero gerencial con DAX y tema personalizado
 
-## Instalación rápida
-
-1. Clona el repo: \`git clone https://github.com/TU-USUARIO/taller-fm.git\`
-2. Abre \`app/index.html\` en el navegador (funciona offline)
+## Instalación
+1. Clona el repo: \`git clone https://github.com/APU-MANTENIMIENTO/TALLER-APU.git\`
+2. Abre \`app/index.html\` en el navegador
 3. Edita \`data/flota/tractos.json\` y \`remolques.json\` con tu flota real
 4. Sube a GitHub Pages o despliega en Azure Static Web Apps
 
 ## Uso diario
-
-- **Supervisor de patio**: abre el app en el celular, registra paradas y liberaciones
-- **Planificador**: revisa el Kanban, gestiona los cambios de estado
-- **Gerencia**: consulta el tablero Power BI con indicadores del ciclo
+- **Supervisor**: registra paradas y liberaciones en el app
+- **Planificador**: revisa el Kanban, gestiona cambios de estado
+- **Gerencia**: consulta el tablero Power BI
 
 ## Licencias Microsoft 365
-
 - SharePoint Lists: incluido en M365 Business Basic/Standard
-- Power Apps con SharePoint: incluido en M365 (conectores estándar)
-- Power BI compartido: Pro por usuario, o capacidad Fabric/Premium
-- Azure Static Web Apps: plan Free (100 GB/mes, autenticación incluida)
-
-## Soporte
-
-Para consultas técnicas o mejoras, abre un Issue en este repositorio.
+- Power Apps con SharePoint: incluido en M365
+- Power BI: Pro por usuario
+- Azure Static Web Apps: plan Free (100 GB/mes)
 `},
-  '.gitignore':{desc:'Archivos y carpetas ignorados por Git.',lang:'txt',content:`# Dependencias
-node_modules/
-package-lock.json
-yarn.lock
-
-# Entornos
+'.gitignore':{desc:'Archivos ignorados por Git.',lang:'txt',content:`node_modules/
 .env
 .env.local
-.env.*.local
-
-# Logs
 logs/
 *.log
-npm-debug.log*
-
-# Editor
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
-
-# OS
 .DS_Store
 Thumbs.db
-
-# Build
 dist/
 build/
 *.zip
-
-# Datos locales (no subir datos reales a GitHub)
 data/local/
 *.bak
 *.tmp
-
-# Respaldo JSON (subir solo si es plantilla vacía)
-# data/flota/*.json
-# data/catalogo/*.json
-
-# Power BI
 *.pbix
 *.pbit
-
-# Azure
 .azure/
 `},
-  'app/index.html':{desc:'Aplicación web principal (HTML + CSS + JS en un solo archivo).',lang:'html',content:`<!DOCTYPE html>
+'app/index.html':{desc:'Aplicación web principal (HTML + CSS + JS).',lang:'html',content:`<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TALLER FM · Estatus de patio</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icon-180.png">
 </head>
 <body>
-  <!-- Aquí va el código completo del app HTML que generamos anteriormente -->
-  <!-- Ver: https://github.com/TU-USUARIO/taller-fm/blob/main/app/index.html -->
-  
+  <h1>TALLER FM</h1>
+  <p>Sistema de gestión de mantenimiento para flota Volvo FM.</p>
+  <p>Este archivo se reemplazará con el app completo generado anteriormente.</p>
   <script>
-    // Cargar datos de flota desde JSON
     async function loadFleet() {
       const tractos = await fetch('../data/flota/tractos.json').then(r => r.json());
       const remolques = await fetch('../data/flota/remolques.json').then(r => r.json());
-      // Inicializar el app con los datos cargados
-      initApp(tractos, remolques);
+      console.log('Flota cargada:', tractos.length, 'tractos,', remolques.length, 'remolques');
     }
-    
-    // Registrar Service Worker para modo offline
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-    
     loadFleet();
   </script>
 </body>
 </html>
 `},
-  'app/manifest.webmanifest':{desc:'Manifiesto PWA para instalación en celular.',lang:'json',content:`{
+'app/manifest.webmanifest':{desc:'Manifiesto PWA para instalación en celular.',lang:'json',content:`{
   "name": "TALLER FM · Estatus de patio",
   "short_name": "TALLER FM",
   "description": "Estatus diario de taller: camiones Volvo FM y semirremolques",
@@ -625,19 +314,12 @@ data/local/
   "theme_color": "#0C1117",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
 `},
-  'app/sw.js':{desc:'Service Worker para funcionamiento offline.',lang:'js',content:`const VERSION = 'tallerfm-v1';
-const ASSETS = [
-  './',
-  './index.html',
-  './manifest.webmanifest',
-  './icon-192.png',
-  './icon-512.png'
-];
+'app/sw.js':{desc:'Service Worker para funcionamiento offline.',lang:'js',content:`const VERSION = 'tallerfm-v1';
+const ASSETS = ['./', './index.html', './manifest.webmanifest'];
 
 self.addEventListener('install', e => {
   e.waitUntil((async () => {
@@ -649,9 +331,7 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil((async () => {
-    for (const key of await caches.keys()) {
-      if (key !== VERSION) await caches.delete(key);
-    }
+    for (const key of await caches.keys()) if (key !== VERSION) await caches.delete(key);
     await self.clients.claim();
   })());
 });
@@ -659,8 +339,6 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
-  
-  // Navegación: network first, fallback a cache
   if (req.mode === 'navigate') {
     e.respondWith((async () => {
       try {
@@ -669,13 +347,11 @@ self.addEventListener('fetch', e => {
         cache.put('./index.html', network.clone());
         return network;
       } catch {
-        return (await caches.match('./index.html')) || (await caches.match('./')) || Response.error();
+        return (await caches.match('./index.html')) || Response.error();
       }
     })());
     return;
   }
-  
-  // Assets: cache first, fallback a network
   e.respondWith((async () => {
     const cached = await caches.match(req);
     if (cached) return cached;
@@ -684,243 +360,74 @@ self.addEventListener('fetch', e => {
       const cache = await caches.open(VERSION);
       cache.put(req, network.clone());
       return network;
-    } catch {
-      return Response.error();
-    }
+    } catch { return Response.error(); }
   })());
 });
 `},
-  'data/flota/tractos.json':{desc:'Base de datos de camiones tracto Volvo FM.',lang:'json',content:`[
-  {
-    "id": "FM-01",
-    "placa": "ABC-123",
-    "vin": "9BVH31BZ0PE123456",
-    "modelo": "Volvo FM 440 6x4",
-    "motor": "D13K440",
-    "transmision": "I-Shift AT2612F",
-    "configuracion_ejes": "6x4",
-    "anio": 2019,
-    "km_actual": 485000,
-    "proximo_pm_km": 500000,
-    "conjunto": "C-01",
-    "conductor_asignado": "Juan Pérez",
-    "estado": "OPERATIVO"
-  },
-  {
-    "id": "FM-02",
-    "placa": "ABC-124",
-    "vin": "9BVH31BZ1PE123457",
-    "modelo": "Volvo FM 480 6x4",
-    "motor": "D13K480",
-    "transmision": "I-Shift AT2612F",
-    "configuracion_ejes": "6x4",
-    "anio": 2021,
-    "km_actual": 320000,
-    "proximo_pm_km": 340000,
-    "conjunto": "C-02",
-    "conductor_asignado": "María Soto",
-    "estado": "INOPERATIVO"
-  },
-  {
-    "id": "FM-03",
-    "placa": "ABC-125",
-    "vin": "9BVH31BZ2PE123458",
-    "modelo": "Volvo FM 440 6x4",
-    "motor": "D13K440",
-    "transmision": "I-Shift AT2612F",
-    "configuracion_ejes": "6x4",
-    "anio": 2018,
-    "km_actual": 612000,
-    "proximo_pm_km": 620000,
-    "conjunto": "C-03",
-    "conductor_asignado": "Luis Ramos",
-    "estado": "OPERATIVO"
-  },
-  {
-    "id": "FM-04",
-    "placa": "ABC-126",
-    "vin": "9BVH31BZ3PE123459",
-    "modelo": "Volvo FM 500 8x4",
-    "motor": "D13K500",
-    "transmision": "I-Shift ATO3512F",
-    "configuracion_ejes": "8x4",
-    "anio": 2022,
-    "km_actual": 180000,
-    "proximo_pm_km": 200000,
-    "conjunto": "C-04",
-    "conductor_asignado": "Ana Quispe",
-    "estado": "DOR"
-  }
+'data/flota/tractos.json':{desc:'Base de datos de camiones tracto Volvo FM.',lang:'json',content:`[
+  {"id":"FM-01","placa":"ABC-123","vin":"9BVH31BZ0PE123456","modelo":"Volvo FM 440 6x4","motor":"D13K440","transmision":"I-Shift AT2612F","config_ejes":"6x4","anio":2019,"km_actual":485000,"proximo_pm_km":500000,"conjunto":"C-01","conductor_asignado":"Juan Pérez","estado":"OPERATIVO"},
+  {"id":"FM-02","placa":"ABC-124","vin":"9BVH31BZ1PE123457","modelo":"Volvo FM 480 6x4","motor":"D13K480","transmision":"I-Shift AT2612F","config_ejes":"6x4","anio":2021,"km_actual":320000,"proximo_pm_km":340000,"conjunto":"C-02","conductor_asignado":"María Soto","estado":"INOPERATIVO"},
+  {"id":"FM-03","placa":"ABC-125","vin":"9BVH31BZ2PE123458","modelo":"Volvo FM 440 6x4","motor":"D13K440","transmision":"I-Shift AT2612F","config_ejes":"6x4","anio":2018,"km_actual":612000,"proximo_pm_km":620000,"conjunto":"C-03","conductor_asignado":"Luis Ramos","estado":"OPERATIVO"},
+  {"id":"FM-04","placa":"ABC-126","vin":"9BVH31BZ3PE123459","modelo":"Volvo FM 500 8x4","motor":"D13K500","transmision":"I-Shift ATO3512F","config_ejes":"8x4","anio":2022,"km_actual":180000,"proximo_pm_km":200000,"conjunto":"C-04","conductor_asignado":"Ana Quispe","estado":"DOR"}
 ]
 `},
-  'data/flota/remolques.json':{desc:'Base de datos de portacontenedores remolque.',lang:'json',content:`[
-  {
-    "id": "SR-01",
-    "placa": "XYZ-201",
-    "vin": "9BCSR01A0PE201001",
-    "tipo_chasis": "Plataforma portacontenedor",
-    "capacidad_teu": 2,
-    "capacidad_toneladas": 35,
-    "ejes": 3,
-    "largoxancho": "12.5m x 2.5m",
-    "anio": 2020,
-    "tara_kg": 5800,
-    "quinta_rueda": "2 pulgadas",
-    "frenos_tipo": "EBS con ABS",
-    "suspension": "Neumática",
-    "conjunto": "C-01",
-    "estado": "OPERATIVO"
-  },
-  {
-    "id": "SR-02",
-    "placa": "XYZ-202",
-    "vin": "9BCSR01A1PE201002",
-    "tipo_chasis": "Plataforma portacontenedor",
-    "capacidad_teu": 2,
-    "capacidad_toneladas": 35,
-    "ejes": 3,
-    "largoxancho": "12.5m x 2.5m",
-    "anio": 2019,
-    "tara_kg": 5900,
-    "quinta_rueda": "2 pulgadas",
-    "frenos_tipo": "EBS con ABS",
-    "suspension": "Neumática",
-    "conjunto": "C-02",
-    "estado": "INOPERATIVO"
-  },
-  {
-    "id": "SR-03",
-    "placa": "XYZ-203",
-    "vin": "9BCSR01A2PE201003",
-    "tipo_chasis": "Plataforma portacontenedor",
-    "capacidad_teu": 2,
-    "capacidad_toneladas": 35,
-    "ejes": 3,
-    "largoxancho": "12.5m x 2.5m",
-    "anio": 2022,
-    "tara_kg": 5700,
-    "quinta_rueda": "2 pulgadas",
-    "frenos_tipo": "EBS con ABS",
-    "suspension": "Neumática",
-    "conjunto": "C-03",
-    "estado": "DOR"
-  },
-  {
-    "id": "SR-04",
-    "placa": "XYZ-204",
-    "vin": "9BCSR01A3PE201004",
-    "tipo_chasis": "Plataforma portacontenedor",
-    "capacidad_teu": 1,
-    "capacidad_toneladas": 28,
-    "ejes": 2,
-    "largoxancho": "12.0m x 2.5m",
-    "anio": 2017,
-    "tara_kg": 4800,
-    "quinta_rueda": "2 pulgadas",
-    "frenos_tipo": "Neumáticos",
-    "suspension": "Ballestas",
-    "conjunto": "C-04",
-    "estado": "OPERATIVO"
-  }
+'data/flota/remolques.json':{desc:'Base de datos de portacontenedores remolque.',lang:'json',content:`[
+  {"id":"SR-01","placa":"XYZ-201","vin":"9BCSR01A0PE201001","tipo_chasis":"Plataforma portacontenedor","capacidad_teu":2,"capacidad_toneladas":35,"ejes":3,"largoxancho":"12.5m x 2.5m","anio":2020,"tara_kg":5800,"quinta_rueda":"2 pulgadas","frenos_tipo":"EBS con ABS","suspension":"Neumática","conjunto":"C-01","estado":"OPERATIVO"},
+  {"id":"SR-02","placa":"XYZ-202","vin":"9BCSR01A1PE201002","tipo_chasis":"Plataforma portacontenedor","capacidad_teu":2,"capacidad_toneladas":35,"ejes":3,"largoxancho":"12.5m x 2.5m","anio":2019,"tara_kg":5900,"quinta_rueda":"2 pulgadas","frenos_tipo":"EBS con ABS","suspension":"Neumática","conjunto":"C-02","estado":"INOPERATIVO"},
+  {"id":"SR-03","placa":"XYZ-203","vin":"9BCSR01A2PE201003","tipo_chasis":"Plataforma portacontenedor","capacidad_teu":2,"capacidad_toneladas":35,"ejes":3,"largoxancho":"12.5m x 2.5m","anio":2022,"tara_kg":5700,"quinta_rueda":"2 pulgadas","frenos_tipo":"EBS con ABS","suspension":"Neumática","conjunto":"C-03","estado":"DOR"},
+  {"id":"SR-04","placa":"XYZ-204","vin":"9BCSR01A3PE201004","tipo_chasis":"Plataforma portacontenedor","capacidad_teu":1,"capacidad_toneladas":28,"ejes":2,"largoxancho":"12.0m x 2.5m","anio":2017,"tara_kg":4800,"quinta_rueda":"2 pulgadas","frenos_tipo":"Neumáticos","suspension":"Ballestas","conjunto":"C-04","estado":"OPERATIVO"}
 ]
 `},
-  'data/catalogo/causas.json':{desc:'Catálogo cerrado de causas técnicas, de gestión y de retención.',lang:'json',content:`[
-  {"codigo": "MEC-01", "descripcion": "Falla motor: inyección / turbo / SCR-AdBlue", "grupo": "Mecánica", "categoria": "DI_TECNICO", "clase": "CORRECTIVO", "aplica": "CAMION"},
-  {"codigo": "MEC-02", "descripcion": "Transmisión I-Shift / embrague", "grupo": "Mecánica", "categoria": "DI_TECNICO", "clase": "CORRECTIVO", "aplica": "CAMION"},
-  {"codigo": "MEC-03", "descripcion": "Frenos EBS/ABS: cámaras, válvulas, ajuste", "grupo": "Mecánica", "categoria": "DI_TECNICO", "clase": "CORRECTIVO", "aplica": "AMBOS"},
-  {"codigo": "MEC-04", "descripcion": "Suspensión: bolsas de aire / muelles", "grupo": "Mecánica", "categoria": "DI_TECNICO", "clase": "CORRECTIVO", "aplica": "AMBOS"},
-  {"codigo": "MEC-05", "descripcion": "Dirección / alineamiento", "grupo": "Mecánica", "categoria": "DI_TECNICO", "clase": "CORRECTIVO", "aplica": "CAMION"},
-  {"codigo": "MEC-06", "descripcion": "Sistema neumático: compresor / secador / fugas", "grupo": "Mecánica", "categoria": "DI_TECNICO", "clase": "CORRECTIVO", "aplica": "AMBOS"},
-  {"codigo": "ELE-01", "descripcion": "Eléctrico: baterías / alternador / arranque", "grupo": "Eléctrico", "categoria": "DI_TECNICO", "clase": "CORRECTIVO", "aplica": "AMBOS"},
-  {"codigo": "ELE-02", "descripcion": "Luces, señalización y señal ABS de remolque", "grupo": "Eléctrico", "categoria": "DI_TECNICO", "clase": "CORRECTIVO", "aplica": "AMBOS"},
-  {"codigo": "NEU-01", "descripcion": "Neumáticos / ruedas / torque", "grupo": "Mecánica", "categoria": "DI_TECNICO", "clase": "CORRECTIVO", "aplica": "AMBOS"},
-  {"codigo": "EST-01", "descripcion": "Chasis / tolva: fisuras y soldadura estructural", "grupo": "Estructura", "categoria": "DI_TECNICO", "clase": "CORRECTIVO", "aplica": "AMBOS"},
-  {"codigo": "EST-02", "descripcion": "Quinta rueda / king pin / patines de apoyo", "grupo": "Estructura", "categoria": "DI_TECNICO", "clase": "CORRECTIVO", "aplica": "AMBOS"},
-  {"codigo": "HID-01", "descripcion": "Hidráulico basculante / cilindros", "grupo": "Hidráulico", "categoria": "DI_TECNICO", "clase": "CORRECTIVO", "aplica": "AMBOS"},
-  {"codigo": "PM-01", "descripcion": "Mantenimiento preventivo programado", "grupo": "Programado", "categoria": "DI_TECNICO", "clase": "PROGRAMADO", "aplica": "AMBOS"},
-  {"codigo": "SIN-01", "descripcion": "Siniestro / daño operacional", "grupo": "Operacional", "categoria": "DI_TECNICO", "clase": "CORRECTIVO", "aplica": "AMBOS"},
-  {"codigo": "LOG-01", "descripcion": "Espera de repuestos", "grupo": "Logística", "categoria": "DI_GESTION", "clase": "LOGISTICO", "aplica": "AMBOS"},
-  {"codigo": "LOG-02", "descripcion": "Espera de taller externo / especialista", "grupo": "Logística", "categoria": "DI_GESTION", "clase": "LOGISTICO", "aplica": "AMBOS"},
-  {"codigo": "LOG-03", "descripcion": "Espera de grúa / traslado", "grupo": "Logística", "categoria": "DI_GESTION", "clase": "LOGISTICO", "aplica": "AMBOS"},
-  {"codigo": "ADM-01", "descripcion": "Espera aprobación de presupuesto", "grupo": "Administrativa", "categoria": "DI_GESTION", "clase": "ADMINISTRATIVO", "aplica": "AMBOS"},
-  {"codigo": "ADM-02", "descripcion": "Espera inspección / certificación / documentos", "grupo": "Administrativa", "categoria": "DI_GESTION", "clase": "ADMINISTRATIVO", "aplica": "AMBOS"},
-  {"codigo": "RET-01", "descripcion": "Operativo: sin conductor asignado", "grupo": "Retención", "categoria": "DOR", "clase": "RETENCION", "aplica": "AMBOS"},
-  {"codigo": "RET-02", "descripcion": "Operativo: sin asignación de ruta / acarreo", "grupo": "Retención", "categoria": "DOR", "clase": "RETENCION", "aplica": "AMBOS"},
-  {"codigo": "RET-03", "descripcion": "Operativo: pendiente prueba de ruta / QA", "grupo": "Retención", "categoria": "DOR", "clase": "RETENCION", "aplica": "AMBOS"},
-  {"codigo": "RET-04", "descripcion": "Operativo: espera escolta / permiso", "grupo": "Retención", "categoria": "DOR", "clase": "RETENCION", "aplica": "AMBOS"},
-  {"codigo": "RET-05", "descripcion": "Operativo: paro por clima / vía", "grupo": "Retención", "categoria": "DOR", "clase": "RETENCION", "aplica": "AMBOS"},
-  {"codigo": "RET-06", "descripcion": "Operativo: espera acople / plancha compatible", "grupo": "Retención", "categoria": "DOR", "clase": "RETENCION", "aplica": "AMBOS"}
+'data/catalogo/causas.json':{desc:'Catálogo cerrado de causas.',lang:'json',content:`[
+  {"codigo":"MEC-01","descripcion":"Falla motor: inyección / turbo / SCR-AdBlue","grupo":"Mecánica","categoria":"DI_TECNICO","clase":"CORRECTIVO","aplica":"CAMION"},
+  {"codigo":"MEC-02","descripcion":"Transmisión I-Shift / embrague","grupo":"Mecánica","categoria":"DI_TECNICO","clase":"CORRECTIVO","aplica":"CAMION"},
+  {"codigo":"MEC-03","descripcion":"Frenos EBS/ABS: cámaras, válvulas, ajuste","grupo":"Mecánica","categoria":"DI_TECNICO","clase":"CORRECTIVO","aplica":"AMBOS"},
+  {"codigo":"MEC-04","descripcion":"Suspensión: bolsas de aire / muelles","grupo":"Mecánica","categoria":"DI_TECNICO","clase":"CORRECTIVO","aplica":"AMBOS"},
+  {"codigo":"MEC-05","descripcion":"Dirección / alineamiento","grupo":"Mecánica","categoria":"DI_TECNICO","clase":"CORRECTIVO","aplica":"CAMION"},
+  {"codigo":"MEC-06","descripcion":"Sistema neumático: compresor / secador / fugas","grupo":"Mecánica","categoria":"DI_TECNICO","clase":"CORRECTIVO","aplica":"AMBOS"},
+  {"codigo":"ELE-01","descripcion":"Eléctrico: baterías / alternador / arranque","grupo":"Eléctrico","categoria":"DI_TECNICO","clase":"CORRECTIVO","aplica":"AMBOS"},
+  {"codigo":"ELE-02","descripcion":"Luces, señalización y señal ABS de remolque","grupo":"Eléctrico","categoria":"DI_TECNICO","clase":"CORRECTIVO","aplica":"AMBOS"},
+  {"codigo":"NEU-01","descripcion":"Neumáticos / ruedas / torque","grupo":"Mecánica","categoria":"DI_TECNICO","clase":"CORRECTIVO","aplica":"AMBOS"},
+  {"codigo":"EST-01","descripcion":"Chasis / tolva: fisuras y soldadura estructural","grupo":"Estructura","categoria":"DI_TECNICO","clase":"CORRECTIVO","aplica":"AMBOS"},
+  {"codigo":"EST-02","descripcion":"Quinta rueda / king pin / patines de apoyo","grupo":"Estructura","categoria":"DI_TECNICO","clase":"CORRECTIVO","aplica":"AMBOS"},
+  {"codigo":"HID-01","descripcion":"Hidráulico basculante / cilindros","grupo":"Hidráulico","categoria":"DI_TECNICO","clase":"CORRECTIVO","aplica":"AMBOS"},
+  {"codigo":"PM-01","descripcion":"Mantenimiento preventivo programado","grupo":"Programado","categoria":"DI_TECNICO","clase":"PROGRAMADO","aplica":"AMBOS"},
+  {"codigo":"SIN-01","descripcion":"Siniestro / daño operacional","grupo":"Operacional","categoria":"DI_TECNICO","clase":"CORRECTIVO","aplica":"AMBOS"},
+  {"codigo":"LOG-01","descripcion":"Espera de repuestos","grupo":"Logística","categoria":"DI_GESTION","clase":"LOGISTICO","aplica":"AMBOS"},
+  {"codigo":"LOG-02","descripcion":"Espera de taller externo / especialista","grupo":"Logística","categoria":"DI_GESTION","clase":"LOGISTICO","aplica":"AMBOS"},
+  {"codigo":"LOG-03","descripcion":"Espera de grúa / traslado","grupo":"Logística","categoria":"DI_GESTION","clase":"LOGISTICO","aplica":"AMBOS"},
+  {"codigo":"ADM-01","descripcion":"Espera aprobación de presupuesto","grupo":"Administrativa","categoria":"DI_GESTION","clase":"ADMINISTRATIVO","aplica":"AMBOS"},
+  {"codigo":"ADM-02","descripcion":"Espera inspección / certificación / documentos","grupo":"Administrativa","categoria":"DI_GESTION","clase":"ADMINISTRATIVO","aplica":"AMBOS"},
+  {"codigo":"RET-01","descripcion":"Operativo: sin conductor asignado","grupo":"Retención","categoria":"DOR","clase":"RETENCION","aplica":"AMBOS"},
+  {"codigo":"RET-02","descripcion":"Operativo: sin asignación de ruta / acarreo","grupo":"Retención","categoria":"DOR","clase":"RETENCION","aplica":"AMBOS"},
+  {"codigo":"RET-03","descripcion":"Operativo: pendiente prueba de ruta / QA","grupo":"Retención","categoria":"DOR","clase":"RETENCION","aplica":"AMBOS"},
+  {"codigo":"RET-04","descripcion":"Operativo: espera escolta / permiso","grupo":"Retención","categoria":"DOR","clase":"RETENCION","aplica":"AMBOS"},
+  {"codigo":"RET-05","descripcion":"Operativo: paro por clima / vía","grupo":"Retención","categoria":"DOR","clase":"RETENCION","aplica":"AMBOS"},
+  {"codigo":"RET-06","descripcion":"Operativo: espera acople / plancha compatible","grupo":"Retención","categoria":"DOR","clase":"RETENCION","aplica":"AMBOS"}
 ]
 `},
-  'data/catalogo/estados.json':{desc:'Definición de estados operativos con colores y reglas.',lang:'json',content:`{
-  "OPERATIVO": {
-    "label": "Operativo · en ruta",
-    "short": "OPERATIVO",
-    "color": "#3DD68C",
-    "hex": "#3DD68C",
-    "rank": 0,
-    "description": "Unidad disponible y en operación"
-  },
-  "DI_TECNICO": {
-    "label": "Inoperativo · técnico",
-    "short": "INOPERATIVO",
-    "color": "#FF4554",
-    "hex": "#FF4554",
-    "rank": 3,
-    "description": "Indisponibilidad por falla técnica, PM o siniestro"
-  },
-  "DI_GESTION": {
-    "label": "Inoperativo · gestión",
-    "short": "INOPERATIVO",
-    "color": "#FFC53D",
-    "hex": "#FFC53D",
-    "rank": 2,
-    "description": "Indisponibilidad por espera de repuestos, taller externo, presupuesto"
-  },
-  "DOR": {
-    "label": "Operativo retenido en taller",
-    "short": "OPERATIVO EN TALLER",
-    "color": "#4C9AFF",
-    "hex": "#4C9AFF",
-    "rank": 1,
-    "description": "Unidad técnicamente operativa pero retenida (sin conductor, sin ruta, etc.)"
-  }
+'data/catalogo/estados.json':{desc:'Definición de estados operativos.',lang:'json',content:`{
+  "OPERATIVO": {"label":"Operativo · en ruta","short":"OPERATIVO","color":"#3DD68C","rank":0,"description":"Unidad disponible y en operación"},
+  "DI_TECNICO": {"label":"Inoperativo · técnico","short":"INOPERATIVO","color":"#FF4554","rank":3,"description":"Indisponibilidad por falla técnica, PM o siniestro"},
+  "DI_GESTION": {"label":"Inoperativo · gestión","short":"INOPERATIVO","color":"#FFC53D","rank":2,"description":"Indisponibilidad por espera de repuestos, taller externo, presupuesto"},
+  "DOR": {"label":"Operativo retenido en taller","short":"OPERATIVO EN TALLER","color":"#4C9AFF","rank":1,"description":"Unidad técnicamente operativa pero retenida"}
 }
 `},
-  '.github/ISSUE_TEMPLATE/cambio-a-inoperativo.yml':{desc:'Template de issue para registrar cambio a estado inoperativo.',lang:'yml',content:`name: "Cambio a INOPERATIVO"
+'.github/ISSUE_TEMPLATE/cambio-a-inoperativo.yml':{desc:'Template de issue para cambio a inoperativo.',lang:'yml',content:`name: "Cambio a INOPERATIVO"
 description: "Registrar cuando una unidad sale de servicio por falla, PM o siniestro"
 title: "[INOPERATIVO] "
 labels: ["estado:inoperativo", "tipo:cambio-estado"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        ## Registro de cambio a INOPERATIVO
-        
-        Complete este formulario para registrar la salida de servicio de una unidad.
-        
   - type: dropdown
     id: unidad
     attributes:
       label: Unidad
-      description: Seleccione la unidad que cambia de estado
-      options:
-        - FM-01
-        - FM-02
-        - FM-03
-        - FM-04
-        - SR-01
-        - SR-02
-        - SR-03
-        - SR-04
-    validations:
-      required: true
-      
+      options: [FM-01, FM-02, FM-03, FM-04, SR-01, SR-02, SR-03, SR-04]
+    validations: {required: true}
   - type: dropdown
     id: causa
     attributes:
       label: Causa
-      description: Seleccione la causa del cambio de estado
       options:
         - MEC-01 · Falla motor
         - MEC-02 · Transmisión I-Shift
@@ -941,173 +448,87 @@ body:
         - LOG-03 · Grúa/traslado
         - ADM-01 · Aprobación presupuesto
         - ADM-02 · Inspección/documentos
-    validations:
-      required: true
-      
+    validations: {required: true}
   - type: input
     id: fecha_inicio
     attributes:
       label: Fecha y hora de ingreso
-      description: Formato YYYY-MM-DD HH:MM
-      placeholder: "2026-11-16 08:00"
-    validations:
-      required: true
-      
+      placeholder: "2026-11-27 08:00"
+    validations: {required: true}
   - type: input
     id: ot
     attributes:
       label: Orden de trabajo (OT)
-      description: Número de OT asignada
       placeholder: "OT-1001"
-    validations:
-      required: false
-      
   - type: input
     id: responsable
     attributes:
       label: Responsable
-      description: Persona que atiende la unidad
       placeholder: "Juan Pérez"
-    validations:
-      required: true
-      
+    validations: {required: true}
   - type: input
     id: fecha_promesa
     attributes:
       label: Fecha promesa de salida
-      description: Fecha estimada de liberación (YYYY-MM-DD HH:MM)
-      placeholder: "2026-11-18 17:00"
-    validations:
-      required: false
-      
+      placeholder: "2026-11-29 17:00"
   - type: textarea
     id: observaciones
     attributes:
       label: Observaciones
-      description: Detalle de la falla, repuesto necesario, condición especial
-      placeholder: "Fuga en inyector cilindro 5, repuesto en tránsito desde Lima"
-    validations:
-      required: false
-      
+      placeholder: "Fuga en inyector cilindro 5, repuesto en tránsito"
   - type: dropdown
     id: prioridad
     attributes:
       label: Prioridad
-      options:
-        - P1 · Crítica (unidad detenida, impacto operativo)
-        - P2 · Alta (afecta producción)
-        - P3 · Media (se puede planificar)
-        - P4 · Baja (no urgente)
-    validations:
-      required: true
+      options: [P1 · Crítica, P2 · Alta, P3 · Media, P4 · Baja]
+    validations: {required: true}
 `},
-  '.github/ISSUE_TEMPLATE/cambio-a-operativo.yml':{desc:'Template de issue para registrar cambio a estado operativo.',lang:'yml',content:`name: "Cambio a OPERATIVO"
-description: "Registrar cuando una unidad se libera y vuelve a ruta/faena"
+'.github/ISSUE_TEMPLATE/cambio-a-operativo.yml':{desc:'Template de issue para cambio a operativo.',lang:'yml',content:`name: "Cambio a OPERATIVO"
+description: "Registrar cuando una unidad se libera y vuelve a ruta"
 title: "[OPERATIVO] "
 labels: ["estado:operativo", "tipo:cambio-estado"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        ## Registro de cambio a OPERATIVO
-        
-        Complete este formulario para registrar la liberación de una unidad.
-        
   - type: dropdown
     id: unidad
     attributes:
       label: Unidad
-      description: Seleccione la unidad que cambia de estado
-      options:
-        - FM-01
-        - FM-02
-        - FM-03
-        - FM-04
-        - SR-01
-        - SR-02
-        - SR-03
-        - SR-04
-    validations:
-      required: true
-      
+      options: [FM-01, FM-02, FM-03, FM-04, SR-01, SR-02, SR-03, SR-04]
+    validations: {required: true}
   - type: input
     id: fecha_fin
     attributes:
       label: Fecha y hora de salida
-      description: Formato YYYY-MM-DD HH:MM
-      placeholder: "2026-11-16 17:00"
-    validations:
-      required: true
-      
+      placeholder: "2026-11-27 17:00"
+    validations: {required: true}
   - type: input
     id: issue_referencia
     attributes:
       label: Issue de ingreso (referencia)
-      description: Número del issue donde se registró el cambio a inoperativo
       placeholder: "#15"
-    validations:
-      required: false
-      
   - type: textarea
     id: trabajo_realizado
     attributes:
       label: Trabajo realizado
-      description: Resumen de las intervenciones efectuadas
-      placeholder: "Cambio de inyector cilindro 5, prueba de ruta OK, unidad liberada"
-    validations:
-      required: true
-      
+      placeholder: "Cambio de inyector cilindro 5, prueba de ruta OK"
+    validations: {required: true}
   - type: dropdown
     id: conductor
     attributes:
       label: Conductor asignado
-      description: Conductor que retoma la unidad
-      options:
-        - Juan Pérez
-        - María Soto
-        - Luis Ramos
-        - Ana Quispe
-        - Sin asignar
-    validations:
-      required: true
-      
-  - type: textarea
-    id: observaciones
-    attributes:
-      label: Observaciones adicionales
-      description: Cualquier nota relevante para el seguimiento
-    validations:
-      required: false
+      options: [Juan Pérez, María Soto, Luis Ramos, Ana Quispe, Sin asignar]
+    validations: {required: true}
 `},
-  '.github/ISSUE_TEMPLATE/retencion-dor.yml':{desc:'Template de issue para registrar retención operativa (DOR).',lang:'yml',content:`name: "Retención DOR"
+'.github/ISSUE_TEMPLATE/retencion-dor.yml':{desc:'Template de issue para retención DOR.',lang:'yml',content:`name: "Retención DOR"
 description: "Registrar cuando una unidad operativa queda retenida en taller"
 title: "[DOR] "
 labels: ["estado:dor", "tipo:retencion"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        ## Registro de retención DOR
-        
-        La unidad está técnicamente operativa pero retenida en taller.
-        **No cuenta como indisponibilidad técnica.**
-        
   - type: dropdown
     id: unidad
     attributes:
       label: Unidad
-      options:
-        - FM-01
-        - FM-02
-        - FM-03
-        - FM-04
-        - SR-01
-        - SR-02
-        - SR-03
-        - SR-04
-    validations:
-      required: true
-      
+      options: [FM-01, FM-02, FM-03, FM-04, SR-01, SR-02, SR-03, SR-04]
+    validations: {required: true}
   - type: dropdown
     id: motivo
     attributes:
@@ -1119,99 +540,60 @@ body:
         - RET-04 · Espera escolta / permiso
         - RET-05 · Paro por clima / vía
         - RET-06 · Espera acople / plancha compatible
-    validations:
-      required: true
-      
+    validations: {required: true}
   - type: input
     id: fecha_inicio
     attributes:
       label: Fecha y hora de inicio
-      description: Formato YYYY-MM-DD HH:MM
-      placeholder: "2026-11-16 10:00"
-    validations:
-      required: true
-      
+      placeholder: "2026-11-27 10:00"
+    validations: {required: true}
   - type: textarea
     id: observaciones
     attributes:
       label: Observaciones
-      description: Detalle del motivo de retención
-    validations:
-      required: false
 `},
-  '.github/ISSUE_TEMPLATE/mantenimiento-programado.yml':{desc:'Template de issue para registrar mantenimiento programado.',lang:'yml',content:`name: "Mantenimiento programado"
+'.github/ISSUE_TEMPLATE/mantenimiento-programado.yml':{desc:'Template de issue para mantenimiento programado.',lang:'yml',content:`name: "Mantenimiento programado"
 description: "Registrar PM planificado con fecha de ingreso y salida estimada"
 title: "[PM] "
 labels: ["estado:pm", "tipo:pm"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        ## Mantenimiento preventivo programado
-        
-        Registre el PM planificado con anticipación.
-        
   - type: dropdown
     id: unidad
     attributes:
       label: Unidad
-      options:
-        - FM-01
-        - FM-02
-        - FM-03
-        - FM-04
-        - SR-01
-        - SR-02
-        - SR-03
-        - SR-04
-    validations:
-      required: true
-      
+      options: [FM-01, FM-02, FM-03, FM-04, SR-01, SR-02, SR-03, SR-04]
+    validations: {required: true}
   - type: input
     id: tipo_pm
     attributes:
       label: Tipo de PM
-      description: Ejemplo: PM 20.000 km, PM 40.000 km, PM mayor
       placeholder: "PM 20.000 km"
-    validations:
-      required: true
-      
+    validations: {required: true}
   - type: input
     id: fecha_ingreso
     attributes:
       label: Fecha de ingreso programada
-      description: Formato YYYY-MM-DD HH:MM
-      placeholder: "2026-11-20 07:00"
-    validations:
-      required: true
-      
+      placeholder: "2026-11-30 07:00"
+    validations: {required: true}
   - type: input
     id: fecha_salida
     attributes:
       label: Fecha de salida estimada
-      description: Formato YYYY-MM-DD HH:MM
-      placeholder: "2026-11-20 18:00"
-    validations:
-      required: true
-      
+      placeholder: "2026-11-30 18:00"
+    validations: {required: true}
   - type: textarea
     id: trabajos
     attributes:
       label: Trabajos a realizar
-      description: Lista de intervenciones planificadas
-      placeholder: "- Cambio de filtros\n- Cambio de aceite\n- Engrase general\n- Inspección de frenos"
-    validations:
-      required: true
-      
+      placeholder: "- Cambio de filtros\\n- Cambio de aceite\\n- Engrase general"
+    validations: {required: true}
   - type: input
     id: responsable
     attributes:
       label: Responsable
-      placeholder: "Mecánico asignado"
-    validations:
-      required: true
+    validations: {required: true}
 `},
-  '.github/workflows/deploy.yml':{desc:'Workflow de GitHub Actions para despliegue automático en GitHub Pages.',lang:'yml',content:`name: Deploy to GitHub Pages
+'.github/workflows/deploy.yml':{desc:'Workflow de GitHub Actions para despliegue automático.',lang:'yml',content:`name: Deploy to GitHub Pages
 
 on:
   push:
@@ -1236,68 +618,52 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './app'
-          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 `},
-  'docs/ARQUITECTURA.md':{desc:'Documentación técnica de la arquitectura del sistema.',lang:'md',content:`# Arquitectura del sistema TALLER FM
+'docs/ARQUITECTURA.md':{desc:'Documentación técnica de la arquitectura.',lang:'md',content:`# Arquitectura del sistema TALLER FM
 
 ## Componentes
 
 ### 1. Aplicación web (app/)
-
-- **index.html**: Aplicación principal en un solo archivo (HTML + CSS + JS)
+- **index.html**: Aplicación principal
 - **manifest.webmanifest**: Configuración PWA
 - **sw.js**: Service Worker para modo offline
-- **icon-*.png**: Íconos de la app
 
 ### 2. Datos (data/)
-
 - **flota/tractos.json**: Base de datos de camiones tracto Volvo FM
 - **flota/remolques.json**: Base de datos de portacontenedores remolque
 - **catalogo/causas.json**: Catálogo cerrado de causas (25 causas)
 - **catalogo/estados.json**: Definición de estados operativos
 
-### 3. Scripts (scripts/)
-
-- **provision-listas.ps1**: Aprovisionamiento de listas SharePoint
-- **importar-datos.ps1**: Importación de datos a SharePoint
-
-### 4. GitHub (`.github/`)
-
+### 3. GitHub (.github/)
 - **ISSUE_TEMPLATE/**: Formularios de issues para cambios de estado
 - **workflows/**: CI/CD con GitHub Actions
 
 ## Reglas de negocio
 
 ### Conteo de días
-
-Un día calendario se imputa al evento si la unidad **seguía en ese estado a la hora de corte** (07:00 por defecto).
+Un día calendario se imputa al evento si la unidad seguía en ese estado a la hora de corte (07:00).
 
 **Ejemplo**: ingresa 04/11 08:00, sale 07/11 17:00 → cortes del 05, 06 y 07 → **3 días inoperativos**.
 
 ### Ciclo 21→21
-
-El ciclo va del día 21 de un mes al día 20 del mes siguiente (o 21 inclusive si se configura).
+El ciclo va del día 21 de un mes al día 20 del mes siguiente.
 
 ### Categorías
-
 - **DI_TECNICO**: Indisponibilidad técnica (falla, PM, siniestro)
-- **DI_GESTION**: Indisponibilidad por gestión (repuestos, taller externo, presupuesto)
+- **DI_GESTION**: Indisponibilidad por gestión (repuestos, taller externo)
 - **DOR**: Operativo retenido en taller (no cuenta como indisponibilidad técnica)
 - **OPERATIVO**: Unidad en ruta/faena
 
 ### Semáforo
-
 - **VERDE**: Operativo
 - **AMARILLO**: ≤3 días en taller
 - **NARANJA**: 4-7 días en taller
@@ -1306,300 +672,123 @@ El ciclo va del día 21 de un mes al día 20 del mes siguiente (o 21 inclusive s
 ## Integración con Microsoft 365
 
 ### Ruta A: SharePoint + Power Platform
-
 - Listas de SharePoint como base de datos
-- Power Apps como interfaz de usuario
+- Power Apps como interfaz
 - Power Automate para automatización
 - Power BI para tableros
 
 ### Ruta B: Azure Static Web Apps
-
 - HTML estático con login Entra ID
 - API de Azure Functions para estado compartido
 - Azure Table Storage para persistencia
 
 ### Ruta C: Excel + Office Scripts
-
 - Libro de Excel en OneDrive/SharePoint
 - Office Script para generación de estatus
 - Power Query para explosión de días
 
-## Seguridad
-
-- **Entra ID**: Autenticación corporativa con MFA
-- **Permisos por rol**: Planificador edita, supervisor libera, gerencia lee
-- **Auditoría**: Historial de cambios con versionado
-- **Datos locales**: localStorage como caché offline
-
 ## Despliegue
 
 ### GitHub Pages (gratuito)
-
 1. Push a la rama \`main\`
 2. GitHub Actions despliega automáticamente
-3. URL: \`https://TU-USUARIO.github.io/taller-fm/\`
+3. URL: \`https://APU-MANTENIMIENTO.github.io/TALLER-APU/\`
 
 ### Azure Static Web Apps (plan Free)
-
 1. Conectar repo de GitHub
 2. Configurar \`staticwebapp.config.json\`
 3. Registrar app en Entra ID
-4. URL: \`https://taller-fm.azurestaticapps.net/\`
-
-## Mantenimiento
-
-- **Actualizaciones**: Crear rama feature, PR a main, merge automático
-- **Datos**: Exportar respaldo JSON desde el app
-- **Backups**: GitHub mantiene historial completo de commits
 `},
-  'docs/USO.md':{desc:'Guía de uso diario del sistema.',lang:'md',content:`# Guía de uso diario
+'docs/USO.md':{desc:'Guía de uso diario.',lang:'md',content:`# Guía de uso diario
 
-## Roles y responsabilidades
+## Roles
 
-### Supervisor de patio
-
-**Horario**: 06:45 - 07:00
-
+### Supervisor de patio (06:45 - 07:00)
 1. Recorre el patio y confirma el estado físico de cada unidad
 2. Abre el app en el celular
 3. Registra las paradas nuevas (cambio a INOPERATIVO)
 4. Libera las unidades reparadas (cambio a OPERATIVO)
 5. Marca las retenciones (DOR)
 
-**Regla de oro**: Si la unidad está lista pero no sale, cambia la causa a RET-xx con fecha y hora.
-
-### Planificador
-
-**Horario**: 07:00 - 07:30
-
+### Planificador (07:00 - 07:30)
 1. Revisa el Kanban en GitHub Projects
-2. Verifica que todos los issues de cambio de estado estén completos
+2. Verifica que todos los issues estén completos
 3. Actualiza las fechas promesa
-4. Coordina con operaciones las liberaciones
+4. Coordina las liberaciones
 5. Genera el reporte diario a las 07:15
 
 ### Gerencia
-
-**Acceso**: Solo lectura en Power BI
-
-1. Consulta el tablero con indicadores del ciclo
+1. Consulta el tablero Power BI
 2. Revisa disponibilidad técnica y operacional
 3. Analiza el Pareto de causas
-4. Identifica unidades críticas (>7 días en taller)
+4. Identifica unidades críticas (>7 días)
 
 ## Flujo diario
 
 ### 06:45 - Recorrido de patio
-
-El supervisor recorre el patio con el celular abierto en el app.
-
-### 06:45 - 07:00 - Registro de cambios
-
-Para cada cambio de estado:
-
-1. **Cambio a INOPERATIVO**:
-   - Abre el app
-   - Selecciona la unidad
-   - Click en "Registrar parada"
-   - Selecciona la causa del catálogo
-   - Ingresa fecha/hora de ingreso
-   - Asigna OT y responsable
-   - Establece fecha promesa
-   - Agrega observaciones
-
-2. **Cambio a OPERATIVO**:
-   - Selecciona la unidad en el app
-   - Click en "Liberar unidad"
-   - Ingresa fecha/hora de salida
-   - Agrega nota de cierre (trabajo realizado)
-
-3. **Retención DOR**:
-   - Selecciona la unidad
-   - Click en "Cambiar condición"
-   - Selecciona causa RET-xx
-   - Ingresa motivo de retención
-
-### 07:00 - Corte diario
-
-**IMPORTANTE**: A las 07:00 se congela el estado. No se editan estados con efecto retroactivo sin registro en observaciones.
-
+### 06:45-07:00 - Registro de cambios
+### 07:00 - Corte diario (no se editan estados retroactivos)
 ### 07:15 - Reporte automático
-
-El flujo de Power Automate (o el app) genera el reporte:
-
-- Unidades en taller
-- Días inoperativos del ciclo
-- Unidades críticas
-- Eventos abiertos
-
-Se publica en el canal de Teams "Taller".
-
 ### 07:30 - Reunión de taller
 
-El jefe de taller revisa:
-
-- Unidades ROJO y NARANJA
-- Causas de las paradas
-- Repuestos pendientes
-- Compromisos de salida
-
-## Crear un Issue de cambio de estado
-
-### Desde GitHub
+## Crear un Issue
 
 1. Ve a la pestaña **Issues** del repo
 2. Click en **New issue**
-3. Selecciona el template correspondiente:
-   - Cambio a INOPERATIVO
-   - Cambio a OPERATIVO
-   - Retención DOR
-   - Mantenimiento programado
+3. Selecciona el template correspondiente
 4. Completa el formulario
 5. Click en **Submit new issue**
-
-### Desde el app
-
-El app puede crear el issue automáticamente al registrar un cambio de estado (requiere integración con GitHub API).
 
 ## Kanban
 
 ### Columnas
-
 - **Backlog**: Issues sin asignar
 - **Planificado**: Issues con fecha estimada
 - **En desarrollo**: Issues en progreso
 - **En revisión**: Issues pendientes de validación
-- **Listo para deploy**: Issues aprobados, pendientes de merge
+- **Listo para deploy**: Issues aprobados
 - **Completado**: Issues cerrados
 
-### Mover tarjetas
-
-1. Arrastra la tarjeta entre columnas
-2. O edita el issue y cambia el label de estado
-
-### Labels automáticas
-
-Al crear un issue con template, se asignan automáticamente:
-
-- \`estado:inoperativo\`, \`estado:operativo\`, \`estado:dor\`, \`estado:pm\`
-- \`tipo:cambio-estado\`, \`tipo:retencion\`, \`tipo:pm\`
-
-## Exportar datos
-
-### Respaldo JSON
-
-En el app: **Reporte → Datos → Respaldo JSON**
-
-Se descarga un archivo con:
-- Unidades
-- Eventos
-- Cierres diarios
-- Configuración
-
-### CSV
-
-En el app: **Reporte → Exportar CSV**
-
-Opciones:
-- Estatus del día
-- Acumulado ciclo
-- Historial eventos
-- Detalle por día
-- Validación
-
-### Power BI
-
-Conecta directamente a las listas de SharePoint o al libro de Excel.
-
-## Solución de problemas
-
-### El app no guarda los datos
-
-- Verifica que el navegador no esté en modo incógnito
-- Revisa el almacenamiento local (F12 → Application → Local Storage)
-- Exporta el respaldo JSON regularmente
-
-### Los datos no se sincronizan
-
-- Si usas SharePoint: verifica la conexión y permisos
-- Si usas API de Azure: revisa los logs en Azure Functions
-- Si usas localStorage: los datos son por dispositivo
-
-### El Kanban no se actualiza
-
-- Recarga la página (F5)
-- Verifica que el issue tenga las labels correctas
-- Revisa los permisos de GitHub Projects
-
 ## Soporte
-
-Para consultas técnicas o reportar errores, abre un Issue en el repo con el label \`tipo:soporte\`.
+Para consultas técnicas, abre un Issue con el label \`tipo:soporte\`.
 `}
 };
 
-/* ---------- flota demo ---------- */
-let TRACTOS=[
+const TRACTOS=[
   {id:'FM-01',placa:'ABC-123',vin:'9BVH31BZ0PE123456',modelo:'Volvo FM 440 6x4',motor:'D13K440',transmision:'I-Shift AT2612F',config_ejes:'6x4',anio:2019,km:485000,pm_km:500000,conjunto:'C-01',conductor:'Juan Pérez',estado:'OPERATIVO'},
   {id:'FM-02',placa:'ABC-124',vin:'9BVH31BZ1PE123457',modelo:'Volvo FM 480 6x4',motor:'D13K480',transmision:'I-Shift AT2612F',config_ejes:'6x4',anio:2021,km:320000,pm_km:340000,conjunto:'C-02',conductor:'María Soto',estado:'INOPERATIVO'},
   {id:'FM-03',placa:'ABC-125',vin:'9BVH31BZ2PE123458',modelo:'Volvo FM 440 6x4',motor:'D13K440',transmision:'I-Shift AT2612F',config_ejes:'6x4',anio:2018,km:612000,pm_km:620000,conjunto:'C-03',conductor:'Luis Ramos',estado:'OPERATIVO'},
   {id:'FM-04',placa:'ABC-126',vin:'9BVH31BZ3PE123459',modelo:'Volvo FM 500 8x4',motor:'D13K500',transmision:'I-Shift ATO3512F',config_ejes:'8x4',anio:2022,km:180000,pm_km:200000,conjunto:'C-04',conductor:'Ana Quispe',estado:'DOR'}
 ];
-let REMOLQUES=[
+const REMOLQUES=[
   {id:'SR-01',placa:'XYZ-201',vin:'9BCSR01A0PE201001',tipo:'Plataforma portacontenedor',teu:2,ton:35,ejes:3,dim:'12.5m x 2.5m',anio:2020,tara:5800,qr:'2 pulgadas',frenos:'EBS con ABS',susp:'Neumática',conjunto:'C-01',estado:'OPERATIVO'},
   {id:'SR-02',placa:'XYZ-202',vin:'9BCSR01A1PE201002',tipo:'Plataforma portacontenedor',teu:2,ton:35,ejes:3,dim:'12.5m x 2.5m',anio:2019,tara:5900,qr:'2 pulgadas',frenos:'EBS con ABS',susp:'Neumática',conjunto:'C-02',estado:'INOPERATIVO'},
   {id:'SR-03',placa:'XYZ-203',vin:'9BCSR01A2PE201003',tipo:'Plataforma portacontenedor',teu:2,ton:35,ejes:3,dim:'12.5m x 2.5m',anio:2022,tara:5700,qr:'2 pulgadas',frenos:'EBS con ABS',susp:'Neumática',conjunto:'C-03',estado:'DOR'},
   {id:'SR-04',placa:'XYZ-204',vin:'9BCSR01A3PE201004',tipo:'Plataforma portacontenedor',teu:1,ton:28,ejes:2,dim:'12.0m x 2.5m',anio:2017,tara:4800,qr:'2 pulgadas',frenos:'Neumáticos',susp:'Ballestas',conjunto:'C-04',estado:'OPERATIVO'}
 ];
 
-/* ---------- Kanban ---------- */
 const COLS=[
-  {id:'backlog',name:'Backlog',color:'var(--steel)',desc:'Issues sin asignar'},
-  {id:'planificado',name:'Planificado',color:'var(--blue)',desc:'Con fecha estimada'},
-  {id:'desarrollo',name:'En desarrollo',color:'var(--acc)',desc:'En progreso'},
-  {id:'revision',name:'En revisión',color:'var(--violet)',desc:'Pendiente validación'},
-  {id:'listo',name:'Listo para deploy',color:'var(--teal)',desc:'Aprobado, pendiente merge'},
-  {id:'completado',name:'Completado',color:'var(--green)',desc:'Cerrado'}
+  {id:'backlog',name:'Backlog',color:'#8FA3B8'},
+  {id:'planificado',name:'Planificado',color:'#4C9AFF'},
+  {id:'desarrollo',name:'En desarrollo',color:'#FFB020'},
+  {id:'revision',name:'En revisión',color:'#A78BFA'},
+  {id:'listo',name:'Listo para deploy',color:'#2DD4BF'},
+  {id:'completado',name:'Completado',color:'#3DD68C'}
 ];
-let CARDS=[
-  {id:1,title:'Cambio a INOPERATIVO · FM-02',desc:'Falla motor D13K480, fuga en inyector cilindro 3. Repuesto en tránsito.',col:'desarrollo',tags:[{t:'estado:inoperativo',c:'var(--red)'},{t:'tipo:falla',c:'var(--magenta)'},{t:'prioridad:p1',c:'var(--red)'}],prio:'p1',meta:{unidad:'FM-02',fecha:'16/11/2026',ot:'OT-1001'}},
-  {id:2,title:'Cambio a INOPERATIVO · SR-02',desc:'Fisura en larguero de tolva, reparación estructural en progreso.',col:'desarrollo',tags:[{t:'estado:inoperativo',c:'var(--red)'},{t:'tipo:falla',c:'var(--magenta)'},{t:'prioridad:p2',c:'var(--orange)'}],prio:'p2',meta:{unidad:'SR-02',fecha:'10/11/2026',ot:'OT-1005'}},
-  {id:3,title:'Cambio a OPERATIVO · FM-01',desc:'PM 20.000 km completado, filtros y aceite cambiados, prueba de ruta OK.',col:'completado',tags:[{t:'estado:operativo',c:'var(--green)'},{t:'tipo:pm',c:'var(--amber)'}],prio:'p3',meta:{unidad:'FM-01',fecha:'14/11/2026',ot:'OT-1002'}},
-  {id:4,title:'Retención DOR · FM-04',desc:'Unidad operativa pero sin conductor asignado. Esperando asignación de ruta.',col:'planificado',tags:[{t:'estado:dor',c:'var(--blue)'},{t:'tipo:retencion',c:'var(--blue)'},{t:'prioridad:p3',c:'var(--amber)'}],prio:'p3',meta:{unidad:'FM-04',fecha:'15/11/2026',ot:'—'}},
-  {id:5,title:'Retención DOR · SR-03',desc:'Espera plancha compatible para acople. Operativa pero retenida.',col:'planificado',tags:[{t:'estado:dor',c:'var(--blue)'},{t:'tipo:retencion',c:'var(--blue)'}],prio:'p4',meta:{unidad:'SR-03',fecha:'14/11/2026',ot:'—'}},
-  {id:6,title:'Cambio a INOPERATIVO · FM-03',desc:'PM 40.000 km programado para el 20/11. Ingreso estimado 07:00.',col:'backlog',tags:[{t:'estado:pm',c:'var(--amber)'},{t:'tipo:pm',c:'var(--amber)'}],prio:'p3',meta:{unidad:'FM-03',fecha:'20/11/2026',ot:'OT-1006'}},
-  {id:7,title:'Mejora: exportar Kanban a CSV',desc:'Agregar botón para exportar todas las tarjetas del Kanban en formato CSV.',col:'revision',tags:[{t:'tipo:mejora',c:'var(--teal)'},{t:'prioridad:p4',c:'var(--blue)'}],prio:'p4',meta:{unidad:'—',fecha:'15/11/2026',ot:'—'}},
-  {id:8,title:'Bug: semáforo no actualiza al liberar',desc:'Al liberar una unidad, el semáforo queda en ROJO hasta recargar la página.',col:'listo',tags:[{t:'tipo:bug',c:'var(--red)'},{t:'prioridad:p2',c:'var(--orange)'}],prio:'p2',meta:{unidad:'—',fecha:'13/11/2026',ot:'—'}},
-  {id:9,title:'Feature: notificaciones Teams',desc:'Integrar Adaptive Card en Teams para notificar cambios de estado críticos.',col:'backlog',tags:[{t:'tipo:feature',c:'var(--violet)'},{t:'prioridad:p2',c:'var(--orange)'}],prio:'p2',meta:{unidad:'—',fecha:'—',ot:'—'}},
-  {id:10,title:'Cambio a OPERATIVO · SR-01',desc:'Cambio de 6 neumáticos completado, unidad liberada y en ruta.',col:'completado',tags:[{t:'estado:operativo',c:'var(--green)'},{t:'tipo:falla',c:'var(--magenta)'}],prio:'p3',meta:{unidad:'SR-01',fecha:'12/11/2026',ot:'OT-0990'}}
+const CARDS=[
+  {id:1,title:'Cambio a INOPERATIVO · FM-02',desc:'Falla motor D13K480, fuga en inyector cilindro 3. Repuesto en tránsito.',col:'desarrollo',tags:[{t:'estado:inoperativo',c:'#FF4554'},{t:'tipo:falla',c:'#F472B6'},{t:'prioridad:p1',c:'#FF4554'}],prio:'p1',meta:{unidad:'FM-02',fecha:'27/11/2026',ot:'OT-1001'}},
+  {id:2,title:'Cambio a INOPERATIVO · SR-02',desc:'Fisura en larguero de tolva, reparación estructural en progreso.',col:'desarrollo',tags:[{t:'estado:inoperativo',c:'#FF4554'},{t:'tipo:falla',c:'#F472B6'},{t:'prioridad:p2',c:'#FF7A2F'}],prio:'p2',meta:{unidad:'SR-02',fecha:'10/11/2026',ot:'OT-1005'}},
+  {id:3,title:'Cambio a OPERATIVO · FM-01',desc:'PM 20.000 km completado, filtros y aceite cambiados, prueba de ruta OK.',col:'completado',tags:[{t:'estado:operativo',c:'#3DD68C'},{t:'tipo:pm',c:'#FFC53D'}],prio:'p3',meta:{unidad:'FM-01',fecha:'14/11/2026',ot:'OT-1002'}},
+  {id:4,title:'Retención DOR · FM-04',desc:'Unidad operativa pero sin conductor asignado. Esperando asignación de ruta.',col:'planificado',tags:[{t:'estado:dor',c:'#4C9AFF'},{t:'tipo:retencion',c:'#4C9AFF'},{t:'prioridad:p3',c:'#FFC53D'}],prio:'p3',meta:{unidad:'FM-04',fecha:'15/11/2026',ot:'—'}},
+  {id:5,title:'Retención DOR · SR-03',desc:'Espera plancha compatible para acople. Operativa pero retenida.',col:'planificado',tags:[{t:'estado:dor',c:'#4C9AFF'},{t:'tipo:retencion',c:'#4C9AFF'}],prio:'p4',meta:{unidad:'SR-03',fecha:'14/11/2026',ot:'—'}},
+  {id:6,title:'Cambio a INOPERATIVO · FM-03',desc:'PM 40.000 km programado para el 30/11. Ingreso estimado 07:00.',col:'backlog',tags:[{t:'estado:pm',c:'#FFC53D'},{t:'tipo:pm',c:'#FFC53D'}],prio:'p3',meta:{unidad:'FM-03',fecha:'30/11/2026',ot:'OT-1006'}},
+  {id:7,title:'Mejora: exportar Kanban a CSV',desc:'Agregar botón para exportar todas las tarjetas del Kanban en formato CSV.',col:'revision',tags:[{t:'tipo:mejora',c:'#2DD4BF'},{t:'prioridad:p4',c:'#4C9AFF'}],prio:'p4',meta:{unidad:'—',fecha:'15/11/2026',ot:'—'}},
+  {id:8,title:'Bug: semáforo no actualiza al liberar',desc:'Al liberar una unidad, el semáforo queda en ROJO hasta recargar la página.',col:'listo',tags:[{t:'tipo:bug',c:'#FF4554'},{t:'prioridad:p2',c:'#FF7A2F'}],prio:'p2',meta:{unidad:'—',fecha:'13/11/2026',ot:'—'}},
+  {id:9,title:'Feature: notificaciones Teams',desc:'Integrar Adaptive Card en Teams para notificar cambios de estado críticos.',col:'backlog',tags:[{t:'tipo:feature',c:'#A78BFA'},{t:'prioridad:p2',c:'#FF7A2F'}],prio:'p2',meta:{unidad:'—',fecha:'—',ot:'—'}},
+  {id:10,title:'Cambio a OPERATIVO · SR-01',desc:'Cambio de 6 neumáticos completado, unidad liberada y en ruta.',col:'completado',tags:[{t:'estado:operativo',c:'#3DD68C'},{t:'tipo:falla',c:'#F472B6'}],prio:'p3',meta:{unidad:'SR-01',fecha:'12/11/2026',ot:'OT-0990'}}
 ];
 let kbFilter='todos';
 
-/* ---------- highlight ---------- */
-function hl(code,lang){
-  let s=esc(code);
-  const kw={
-    js:'function|const|let|var|return|if|else|for|while|new|require|module|exports|await|async|try|catch|throw|typeof|null|true|false|class|import|export|from',
-    json:'',md:'',html:'',yml:'name|description|title|labels|body|type|dropdown|input|textarea|markdown|attributes|validations|required|options|placeholder|on|push|branches|jobs|runs-on|steps|uses|with|if',
-    txt:'',ts:'function|const|let|var|return|if|else|for|while|new|type|import|export|from|of|in|typeof|await|async|try|catch|finally|throw|class|interface|null|true|false'
-  }[lang]||'';
-  const parts=[];
-  const rx=/(#[^\n]*|\/\/[^\n]*|\/\*[\s\S]*?\*\/)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|(\b\d+(?:\.\d+)?\b)/g;
-  let last=0,m;
-  while((m=rx.exec(s))){
-    parts.push(s.slice(last,m.index));
-    if(m[1])parts.push(`<span class="c-com">${m[1]}</span>`);
-    else if(m[2])parts.push(`<span class="c-str">${m[2]}</span>`);
-    else if(m[3])parts.push(`<span class="c-num">${m[3]}</span>`);
-    last=m.index+m[0].length;
-  }
-  parts.push(s.slice(last));
-  s=parts.join('');
-  if(kw)s=s.replace(new RegExp(`\\b(${kw})\\b`,'g'),(x)=>`<span class="c-key">${x}</span>`);
-  if(lang==='md')s=s.replace(/^(#{1,6}\s.+)$/gm,'<span class="c-head">$1</span>');
-  return s.split('\n').map((l,i)=>`<span class="ln">${i+1}</span>${l}`).join('\n');
-}
-
-/* ---------- templates ---------- */
 const TPL_INOP=`name: "Cambio a INOPERATIVO"
 description: "Registrar cuando una unidad sale de servicio"
 title: "[INOPERATIVO] "
@@ -1627,7 +816,7 @@ body:
     id: fecha_inicio
     attributes:
       label: Fecha y hora de ingreso
-      placeholder: "2026-11-16 08:00"
+      placeholder: "2026-11-27 08:00"
     validations: {required: true}
   - type: input
     id: ot
@@ -1644,7 +833,7 @@ body:
     id: fecha_promesa
     attributes:
       label: Fecha promesa de salida
-      placeholder: "2026-11-18 17:00"
+      placeholder: "2026-11-29 17:00"
   - type: textarea
     id: observaciones
     attributes:
@@ -1672,7 +861,7 @@ body:
     id: fecha_fin
     attributes:
       label: Fecha y hora de salida
-      placeholder: "2026-11-16 17:00"
+      placeholder: "2026-11-27 17:00"
     validations: {required: true}
   - type: input
     id: issue_referencia
@@ -1719,7 +908,7 @@ body:
     id: fecha_inicio
     attributes:
       label: Fecha y hora de inicio
-      placeholder: "2026-11-16 10:00"
+      placeholder: "2026-11-27 10:00"
     validations: {required: true}
   - type: textarea
     id: observaciones
@@ -1747,13 +936,13 @@ body:
     id: fecha_ingreso
     attributes:
       label: Fecha de ingreso programada
-      placeholder: "2026-11-20 07:00"
+      placeholder: "2026-11-30 07:00"
     validations: {required: true}
   - type: input
     id: fecha_salida
     attributes:
       label: Fecha de salida estimada
-      placeholder: "2026-11-20 18:00"
+      placeholder: "2026-11-30 18:00"
     validations: {required: true}
   - type: textarea
     id: trabajos
@@ -1767,8 +956,58 @@ body:
       label: Responsable
     validations: {required: true}`;
 
-/* ---------- render ---------- */
 let curFile='README.md';
+
+function toast(m,k='info',ms=3500){
+  const col={ok:'#3DD68C',warn:'#FFC53D',err:'#FF4554',info:'#4C9AFF'}[k];
+  const el=document.createElement('div');el.className='toast';el.style.setProperty('--tc',col);
+  el.textContent=m;document.body.appendChild(el);
+  setTimeout(()=>{el.style.opacity='0';setTimeout(()=>el.remove(),300)},ms);
+}
+
+function download(name,content,mime){
+  const b=new Blob([content],{type:mime||'text/plain;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);
+}
+
+function crc32(u8){
+  const t=new Uint32Array(256);
+  for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}
+  let c=0xFFFFFFFF;for(let i=0;i<u8.length;i++)c=t[(c^u8[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;
+}
+
+function zipBlob(list){
+  const enc=new TextEncoder(),chunks=[],cent=[];let off=0;
+  const d=new Date(),tm=((d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1))&0xFFFF,
+        dd=(((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate())&0xFFFF;
+  for(const f of list){
+    const nm=enc.encode(f.path),dt=enc.encode(f.content),crc=crc32(dt);
+    const lh=new Uint8Array(30+nm.length),lv=new DataView(lh.buffer);
+    lv.setUint32(0,0x04034b50,true);lv.setUint16(4,20,true);lv.setUint16(6,0x0800,true);lv.setUint16(8,0,true);
+    lv.setUint16(10,tm,true);lv.setUint16(12,dd,true);lv.setUint32(14,crc,true);lv.setUint32(18,dt.length,true);lv.setUint32(22,dt.length,true);
+    lv.setUint16(26,nm.length,true);lv.setUint16(28,0,true);lh.set(nm,30);
+    chunks.push(lh,dt);
+    const ch=new Uint8Array(46+nm.length),cv=new DataView(ch.buffer);
+    cv.setUint32(0,0x02014b50,true);cv.setUint16(4,20,true);cv.setUint16(6,20,true);cv.setUint16(8,0x0800,true);cv.setUint16(10,0,true);
+    cv.setUint16(12,tm,true);cv.setUint16(14,dd,true);cv.setUint32(16,crc,true);cv.setUint32(20,dt.length,true);cv.setUint32(24,dt.length,true);
+    cv.setUint16(28,nm.length,true);cv.setUint32(42,off,true);ch.set(nm,46);
+    cent.push(ch);off+=lh.length+dt.length;
+  }
+  let cs=0;cent.forEach(c=>cs+=c.length);
+  const eo=new Uint8Array(22),ev=new DataView(eo.buffer);
+  ev.setUint32(0,0x06054b50,true);ev.setUint16(8,list.length,true);ev.setUint16(10,list.length,true);
+  ev.setUint32(12,cs,true);ev.setUint32(16,off,true);
+  return new Blob([...chunks,...cent,eo],{type:'application/zip'});
+}
+
+function downloadZip(){
+  const list=Object.entries(FILES).map(([path,f])=>({path,content:f.content}));
+  download('taller-fm-github-kit.zip',zipBlob(list));
+  toast('✓ Kit generado: '+list.length+' archivos listos para subir a GitHub','ok',5000);
+}
+
 function renderTree(){
   const paths=Object.keys(FILES).sort();
   const groups={};
@@ -1785,9 +1024,7 @@ function renderTree(){
     const keys=Object.keys(obj).sort((a,b)=>{
       const aDir=typeof obj[a]==='object'&&!obj[a]._path;
       const bDir=typeof obj[b]==='object'&&!obj[b]._path;
-      if(aDir&&!bDir)return -1;
-      if(!aDir&&bDir)return 1;
-      return a.localeCompare(b);
+      if(aDir&&!bDir)return -1;if(!aDir&&bDir)return 1;return a.localeCompare(b);
     });
     keys.forEach(k=>{
       if(k.startsWith('_'))return;
@@ -1795,59 +1032,62 @@ function renderTree(){
       const isDir=typeof val==='object'&&!val._path;
       const indent=depth*16;
       if(isDir){
-        html+=`<div class="trow dir" style="padding-left:${9+indent}px"><span class="indent" style="width:${indent}px"></span>${icon('i-folder')}<span class="name">${esc(k)}</span></div>`;
+        html+=`<div class="trow dir" style="padding-left:${9+indent}px"><span class="ico">📁</span><span class="name">${esc(k)}</span></div>`;
         html+=render(val,depth+1);
       }else{
         const f=val._file;
-        const langClass={md:'doc',json:'data',yml:'yam',html:'code',js:'code',txt:'file'}[f.lang]||'file';
+        const cls={md:'doc',json:'file',yml:'file',html:'file',js:'file',txt:'file'}[f.lang]||'file';
         const size=(f.content.length/1024).toFixed(1);
-        html+=`<div class="trow file ${langClass}" data-file="${esc(val._path)}" style="padding-left:${9+indent}px"><span class="indent" style="width:${indent}px"></span>${icon('i-file')}<span class="name">${esc(k)}</span><span class="size">${size}k</span></div>`;
+        html+=`<div class="trow file ${cls}" data-file="${esc(val._path)}" style="padding-left:${9+indent}px"><span class="ico">📄</span><span class="name">${esc(k)}</span><span class="size">${size}k</span></div>`;
       }
     });
     return html;
   };
   $('#treeList').innerHTML=render(groups);
 }
+
 function renderViewer(){
   const f=FILES[curFile];
   if(!f){$('#vPath').textContent='—';$('#vCode').textContent='';$('#vDesc').textContent='Sin archivos.';return}
   $('#vPath').textContent=curFile;$('#vDesc').textContent=f.desc;
-  const l=$('#vLang');l.textContent=f.lang.toUpperCase();l.style.setProperty('--fc',LANGC[f.lang]||'var(--acc)');
-  $('#vCode').innerHTML=hl(f.content,f.lang);
-  $('.code').scrollTop=0;
+  const l=$('#vLang');l.textContent=f.lang.toUpperCase();
+  $('#vCode').textContent=f.content;
 }
-const LANGC={md:'#3FA34D',json:'#FFC53D',yml:'#F472B6',html:'#FF7A2F',js:'#F2C811',txt:'#94A7BD'};
+
 function renderFleet(){
   const tRows=TRACTOS.map(u=>{
     const st=u.estado==='OPERATIVO'?'op':u.estado==='INOPERATIVO'?'inop':u.estado==='DOR'?'dor':'pm';
-    return `<tr><td><b>${esc(u.id)}</b></td><td><span class="plate">${esc(u.placa)}</span></td><td>${esc(u.modelo)}</td><td class="mono">${esc(u.motor)}</td><td class="mono">${esc(u.transmision)}</td><td class="mono">${esc(u.config_ejes)}</td><td class="mono">${u.anio}</td><td class="mono">${u.km.toLocaleString('es-PE')}</td><td class="mono">${u.pm_km.toLocaleString('es-PE')}</td><td>${esc(u.conjunto)}</td><td>${esc(u.conductor)}</td><td><span class="state ${st}">${u.estado}</span></td></tr>`;
+    return `<tr><td><b>${esc(u.id)}</b></td><td><span class="plate">${esc(u.placa)}</span></td><td>${esc(u.modelo)}</td><td>${esc(u.motor)}</td><td>${esc(u.transmision)}</td><td>${esc(u.config_ejes)}</td><td>${u.anio}</td><td>${u.km.toLocaleString('es-PE')}</td><td>${u.pm_km.toLocaleString('es-PE')}</td><td>${esc(u.conjunto)}</td><td>${esc(u.conductor)}</td><td><span class="state ${st}">${u.estado}</span></td></tr>`;
   }).join('');
   $('#tractoTable').innerHTML=`<tr><th>ID</th><th>Placa</th><th>Modelo</th><th>Motor</th><th>Transmisión</th><th>Ejes</th><th>Año</th><th>KM actual</th><th>Próximo PM</th><th>Conjunto</th><th>Conductor</th><th>Estado</th></tr>${tRows}`;
-  $('#tractoCount').textContent=`${TRACTOS.length} unidades`;
-  
+  $('#tractoCount').textContent=TRACTOS.length+' unidades';
+
   const rRows=REMOLQUES.map(u=>{
     const st=u.estado==='OPERATIVO'?'op':u.estado==='INOPERATIVO'?'inop':u.estado==='DOR'?'dor':'pm';
-    return `<tr><td><b>${esc(u.id)}</b></td><td><span class="plate">${esc(u.placa)}</span></td><td>${esc(u.tipo)}</td><td class="mono">${u.teu} TEU</td><td class="mono">${u.ton} t</td><td class="mono">${u.ejes}</td><td class="mono">${esc(u.dim)}</td><td class="mono">${u.anio}</td><td class="mono">${u.tara.toLocaleString('es-PE')} kg</td><td>${esc(u.conjunto)}</td><td><span class="state ${st}">${u.estado}</span></td></tr>`;
+    return `<tr><td><b>${esc(u.id)}</b></td><td><span class="plate">${esc(u.placa)}</span></td><td>${esc(u.tipo)}</td><td>${u.teu} TEU</td><td>${u.ton} t</td><td>${u.ejes}</td><td>${esc(u.dim)}</td><td>${u.anio}</td><td>${u.tara.toLocaleString('es-PE')} kg</td><td>${esc(u.conjunto)}</td><td><span class="state ${st}">${u.estado}</span></td></tr>`;
   }).join('');
   $('#remolqueTable').innerHTML=`<tr><th>ID</th><th>Placa</th><th>Tipo</th><th>TEU</th><th>Ton</th><th>Ejes</th><th>Dimensiones</th><th>Año</th><th>Tara</th><th>Conjunto</th><th>Estado</th></tr>${rRows}`;
-  $('#remolqueCount').textContent=`${REMOLQUES.length} unidades`;
+  $('#remolqueCount').textContent=REMOLQUES.length+' unidades';
 }
+
 function renderKanban(){
   const chips=[{id:'todos',name:'Todas',n:CARDS.length},{id:'inoperativo',name:'Inoperativo',n:CARDS.filter(c=>c.tags.some(t=>t.t==='estado:inoperativo')).length},{id:'operativo',name:'Operativo',n:CARDS.filter(c=>c.tags.some(t=>t.t==='estado:operativo')).length},{id:'dor',name:'DOR',n:CARDS.filter(c=>c.tags.some(t=>t.t==='estado:dor')).length},{id:'pm',name:'PM',n:CARDS.filter(c=>c.tags.some(t=>t.t==='estado:pm')).length}];
   $('#kbChips').innerHTML=chips.map(c=>`<button class="chip${kbFilter===c.id?' on':''}" data-filter="${c.id}">${c.name}<span class="n">${c.n}</span></button>`).join('');
-  
+
   const filtered=kbFilter==='todos'?CARDS:CARDS.filter(c=>c.tags.some(t=>t.t===`estado:${kbFilter}`));
   $('#kbBoard').innerHTML=COLS.map(col=>{
     const cards=filtered.filter(c=>c.col===col.id);
-    return `<div class="col" style="--cc:${col.color}"><div class="colhd"><span class="dot"></span><span class="nm">${col.name}</span><span class="ct">${cards.length}</span></div><div class="colbody">${cards.map((c,i)=>`<div class="kcard" style="--cc:${col.color};--i:${i}" data-card="${c.id}"><span class="prio ${c.prio}">${c.prio.toUpperCase()}</span><div class="t">${esc(c.title)}</div><div class="d">${esc(c.desc)}</div><div class="tags">${c.tags.map(t=>`<span class="tag" style="color:${t.c}">${esc(t.t)}</span>`).join('')}</div><div class="meta">${icon('i-clock')}<span>${esc(c.meta.unidad)}</span><span>·</span><b>${esc(c.meta.fecha)}</b>${c.meta.ot!=='—'?`<span>·</span><span>${esc(c.meta.ot)}</span>`:''}</div></div>`).join('')}</div></div>`;
+    return `<div class="col"><div class="colhd"><span class="dot" style="background:${col.color}"></span><span class="nm">${col.name}</span><span class="ct">${cards.length}</span></div><div class="colbody">${cards.map(c=>`<div class="kcard" style="--cc:${col.color}"><span class="prio ${c.prio}">${c.prio.toUpperCase()}</span><div class="t">${esc(c.title)}</div><div class="d">${esc(c.desc)}</div><div class="tags">${c.tags.map(t=>`<span class="tag" style="color:${t.c}">${esc(t.t)}</span>`).join('')}</div><div class="meta"><span>${esc(c.meta.unidad)}</span><span>·</span><b>${esc(c.meta.fecha)}</b>${c.meta.ot!=='—'?`<span>·</span><span>${esc(c.meta.ot)}</span>`:''}</div></div>`).join('')}</div></div>`;
   }).join('');
 }
+
 function renderTemplates(){
-  $('#tplInop').innerHTML=hl(TPL_INOP,'yml');
-  $('#tplOp').innerHTML=hl(TPL_OP,'yml');
-  $('#tplDor').innerHTML=hl(TPL_DOR,'yml');
-  $('#tplPm').innerHTML=hl(TPL_PM,'yml');
+  $('#tplInop').textContent=TPL_INOP;
+  $('#tplOp').textContent=TPL_OP;
+  $('#tplDor').textContent=TPL_DOR;
+  $('#tplPm').textContent=TPL_PM;
 }
+
 function renderHero(){
   $('#heroStats').innerHTML=[
     [Object.keys(FILES).length,'archivos en el repo'],
@@ -1856,48 +1096,53 @@ function renderHero(){
     [TRACTOS.length,'camiones tracto'],
     [REMOLQUES.length,'portacontenedores'],
     ['4','templates de issues']
-  ].map(s=>`<div class="hs"><b>${s[0]}</b><span>${s[1]}</span></div>`).join('');
-}
-function renderAll(){
-  renderTree();renderViewer();renderFleet();renderKanban();renderTemplates();renderHero();
+  ].map(s=>`<div class="stat"><b>${s[0]}</b><span>${s[1]}</span></div>`).join('');
   $('#footStamp').textContent=`${Object.keys(FILES).length} archivos · ${TRACTOS.length+REMOLQUES.length} unidades · ${CARDS.length} tarjetas`;
 }
 
-/* ---------- eventos ---------- */
+function renderAll(){
+  renderTree();renderViewer();renderFleet();renderKanban();renderTemplates();renderHero();
+}
+
 document.addEventListener('click',e=>{
   const tf=e.target.closest('[data-file]');
-  if(tf){curFile=tf.dataset.file;renderTree();renderViewer();snd('tick');
+  if(tf){curFile=tf.dataset.file;renderTree();renderViewer();
     $$('.trow').forEach(r=>r.classList.remove('on'));tf.classList.add('on');return}
-  const cp=e.target.closest('#copyFile');
-  if(cp){const f=FILES[curFile];if(!f)return;
-    navigator.clipboard?.writeText(f.content).then(()=>{toast('Archivo copiado al portapapeles','ok');snd('ok')}).catch(()=>toast('No se pudo copiar','warn'));return}
-  const dl=e.target.closest('#dlFile');
-  if(dl){const f=FILES[curFile];if(!f)return;
-    download(curFile.split('/').pop(),f.content);snd('ok');toast('Archivo descargado','ok');return}
-  const kit=e.target.closest('#kitBtn');
-  if(kit){downloadZip();snd('zip');toast(`Kit generado: ${Object.keys(FILES).length} archivos`,'ok',5200);return}
-  const snd2=e.target.closest('#sndBtn');
-  if(snd2){soundOn=!soundOn;snd2.setAttribute('aria-pressed',soundOn);snd2.title=soundOn?'Silenciar sonidos':'Activar sonidos';snd2.innerHTML=icon(soundOn?'i-snd':'i-mute');if(soundOn)snd('tick');toast(soundOn?'Sonidos activados':'Sonidos silenciados','info',2000);return}
+  if(e.target.closest('#kitBtn')){downloadZip();return}
+  if(e.target.closest('#copyFile')){const f=FILES[curFile];if(!f)return;
+    navigator.clipboard?.writeText(f.content).then(()=>toast('✓ Archivo copiado al portapapeles','ok')).catch(()=>toast('No se pudo copiar','warn'));return}
+  if(e.target.closest('#dlFile')){const f=FILES[curFile];if(!f)return;
+    download(curFile.split('/').pop(),f.content);toast('✓ Archivo descargado','ok');return}
   const fc=e.target.closest('[data-filter]');
-  if(fc){kbFilter=fc.dataset.filter;renderKanban();snd('tick');return}
-  const add=e.target.closest('#kbAdd');
-  if(add){openModal('newCard');return}
-  const exp=e.target.closest('#kbExport');
-  if(exp){exportKanban();return}
-  const addUnit=e.target.closest('[data-add]');
-  if(addUnit){openModal('newUnit',addUnit.dataset.add);return}
+  if(fc){kbFilter=fc.dataset.filter;renderKanban();return}
+  if(e.target.closest('#kbAdd')){openModal('newCard');return}
+  if(e.target.closest('#kbExport')){
+    const head=['id','titulo','descripcion','columna','prioridad','unidad','fecha','ot','tags'];
+    const rows=CARDS.map(c=>[c.id,c.title,c.desc,COLS.find(x=>x.id===c.col).name,c.prio,c.meta.unidad,c.meta.fecha,c.meta.ot,c.tags.map(t=>t.t).join(',')]);
+    const cell=v=>{let s=String(v??'');return /[";\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+    download('kanban.csv','\uFEFF'+[head,...rows].map(r=>r.map(cell).join(';')).join('\r\n'),'text/csv;charset=utf-8');
+    toast('✓ kanban.csv descargado','ok');return}
+  const add=e.target.closest('[data-add]');
+  if(add){openModal('newUnit',add.dataset.add);return}
   const csv=e.target.closest('[data-csv]');
-  if(csv){exportCsv(csv.dataset.csv);return}
-  const card=e.target.closest('[data-card]');
-  if(card){openModal('cardDetail',+card.dataset.card);return}
+  if(csv){
+    const cell=v=>{let s=String(v??'');return /[";\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+    if(csv.dataset.csv==='tracto'){
+      const head=['id','placa','vin','modelo','motor','transmision','config_ejes','anio','km','pm_km','conjunto','conductor','estado'];
+      const rows=TRACTOS.map(u=>head.map(h=>u[h]));
+      download('tractos.csv','\uFEFF'+[head,...rows].map(r=>r.map(cell).join(';')).join('\r\n'),'text/csv;charset=utf-8');
+    }else{
+      const head=['id','placa','vin','tipo','teu','ton','ejes','dim','anio','tara','qr','frenos','susp','conjunto','estado'];
+      const rows=REMOLQUES.map(u=>head.map(h=>u[h]));
+      download('remolques.csv','\uFEFF'+[head,...rows].map(r=>r.map(cell).join(';')).join('\r\n'),'text/csv;charset=utf-8');
+    }
+    toast('✓ CSV descargado','ok');return}
 });
-document.addEventListener('pointerdown',function o(){ac();document.removeEventListener('pointerdown',o)},{once:true});
 
-/* ---------- modal ---------- */
 function openModal(type,data){
   let html='';
   if(type==='newCard'){
-    html=`<div class="mhead">${icon('i-plus')}<h2>Nueva tarjeta</h2><button class="mini x" data-act="close-modal">${icon('i-x')}</button></div>
+    html=`<h3>Nueva tarjeta</h3>
     <form data-form="newCard">
       <div class="field"><label>Título *</label><input name="title" required placeholder="Cambio a INOPERATIVO · FM-01"></div>
       <div class="field"><label>Descripción</label><textarea name="desc" placeholder="Detalle del cambio de estado..."></textarea></div>
@@ -1910,11 +1155,11 @@ function openModal(type,data){
         <div class="field"><label>Fecha</label><input name="fecha" type="date" value="${new Date().toISOString().split('T')[0]}"></div>
       </div>
       <div class="field"><label>OT</label><input name="ot" placeholder="OT-1001"></div>
-      <div class="mfoot"><button type="button" class="btn btn-ghost" data-act="close-modal">Cancelar</button><button type="submit" class="btn btn-acc">${icon('i-plus')}Crear tarjeta</button></div>
+      <div class="mfoot"><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancelar</button><button type="submit" class="btn btn-acc">Crear tarjeta</button></div>
     </form>`;
   }else if(type==='newUnit'){
     const isTracto=data==='tracto';
-    html=`<div class="mhead">${icon(isTracto?'i-truck':'i-trailer')}<h2>Nueva ${isTracto?'camión tracto':'portacontenedor remolque'}</h2><button class="mini x" data-act="close-modal">${icon('i-x')}</button></div>
+    html=`<h3>Nueva ${isTracto?'camión tracto':'portacontenedor remolque'}</h3>
     <form data-form="newUnit" data-type="${data}">
       <div class="frow">
         <div class="field"><label>ID *</label><input name="id" required placeholder="${isTracto?'FM-05':'SR-05'}"></div>
@@ -1962,27 +1207,14 @@ function openModal(type,data){
         <div class="field"><label>Conjunto</label><input name="conjunto" placeholder="C-05"></div>
       </div>`}
       <div class="field"><label>Estado inicial</label><select name="estado"><option value="OPERATIVO">OPERATIVO</option><option value="INOPERATIVO">INOPERATIVO</option><option value="DOR">DOR</option></select></div>
-      <div class="mfoot"><button type="button" class="btn btn-ghost" data-act="close-modal">Cancelar</button><button type="submit" class="btn btn-acc">${icon('i-plus')}Crear unidad</button></div>
+      <div class="mfoot"><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancelar</button><button type="submit" class="btn btn-acc">Crear unidad</button></div>
     </form>`;
-  }else if(type==='cardDetail'){
-    const c=CARDS.find(x=>x.id===data);if(!c)return;
-    html=`<div class="mhead">${icon('i-eye')}<h2>${esc(c.title)}</h2><button class="mini x" data-act="close-modal">${icon('i-x')}</button></div>
-    <div style="margin-bottom:14px"><div style="font-size:13px;color:var(--mut);margin-bottom:10px">${esc(c.desc)}</div>
-    <div class="tags" style="margin-bottom:10px">${c.tags.map(t=>`<span class="tag" style="color:${t.c}">${esc(t.t)}</span>`).join('')}</div>
-    <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px">
-      <span style="color:var(--dim)">Columna:</span><span><b>${esc(COLS.find(x=>x.id===c.col).name)}</b></span>
-      <span style="color:var(--dim)">Prioridad:</span><span><b>${c.prio.toUpperCase()}</b></span>
-      <span style="color:var(--dim)">Unidad:</span><span class="mono">${esc(c.meta.unidad)}</span>
-      <span style="color:var(--dim)">Fecha:</span><span class="mono">${esc(c.meta.fecha)}</span>
-      <span style="color:var(--dim)">OT:</span><span class="mono">${esc(c.meta.ot)}</span>
-    </div></div>
-    <div class="mfoot"><button class="btn btn-ghost" data-act="close-modal">Cerrar</button><button class="btn btn-acc" data-act="editCard" data-id="${c.id}">${icon('i-edit')}Editar</button></div>`;
   }
-  $('#modal').innerHTML=html;$('#modalWrap').classList.add('on');
+  $('#modal').innerHTML=html;$('#modalBg').classList.add('on');
 }
-function closeModal(){$('#modalWrap').classList.remove('on')}
+function closeModal(){$('#modalBg').classList.remove('on')}
 document.addEventListener('click',e=>{
-  if(e.target.closest('[data-act="close-modal"]')||e.target.closest('[data-act="close-modal-bg"]')){closeModal();return}
+  if(e.target.id==='modalBg')closeModal();
   const form=e.target.closest('form[data-form]');
   if(form){
     e.preventDefault();
@@ -1990,7 +1222,7 @@ document.addEventListener('click',e=>{
     if(form.dataset.form==='newCard'){
       const title=fd.get('title');if(!title){toast('Completa el título','warn');return}
       CARDS.push({id:Date.now(),title,desc:fd.get('desc')||'',col:fd.get('col'),tags:[],prio:fd.get('prio'),meta:{unidad:fd.get('unidad'),fecha:fd.get('fecha')||'—',ot:fd.get('ot')||'—'}});
-      closeModal();renderKanban();snd('ok');toast('Tarjeta creada','ok');
+      closeModal();renderKanban();toast('✓ Tarjeta creada','ok');
     }else if(form.dataset.form==='newUnit'){
       const id=fd.get('id'),placa=fd.get('placa');if(!id||!placa){toast('Completa ID y placa','warn');return}
       if(form.dataset.type==='tracto'){
@@ -1998,85 +1230,13 @@ document.addEventListener('click',e=>{
       }else{
         REMOLQUES.push({id,placa,vin:fd.get('vin')||'',tipo:fd.get('tipo')||'',teu:+fd.get('teu')||2,ton:+fd.get('ton')||35,ejes:+fd.get('ejes')||3,dim:fd.get('dim')||'',anio:+fd.get('anio')||2024,tara:+fd.get('tara')||5800,qr:fd.get('qr')||'',frenos:fd.get('frenos')||'',susp:fd.get('susp')||'',conjunto:fd.get('conjunto')||'',estado:fd.get('estado')});
       }
-      closeModal();renderFleet();snd('ok');toast('Unidad creada','ok');
+      closeModal();renderFleet();toast('✓ Unidad creada','ok');
     }
   }
 });
 
-/* ---------- export ---------- */
-function download(name,content,mime){
-  const b=new Blob([content],{type:mime||'text/plain;charset=utf-8'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();
-  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);
-}
-function exportCsv(type){
-  const cell=v=>{let s=String(v??'');return /[";\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
-  if(type==='tracto'){
-    const head=['id','placa','vin','modelo','motor','transmision','config_ejes','anio','km','pm_km','conjunto','conductor','estado'];
-    const rows=TRACTOS.map(u=>head.map(h=>u[h]));
-    download('tractos.csv','\uFEFF'+[head,...rows].map(r=>r.map(cell).join(';')).join('\r\n'),'text/csv;charset=utf-8');
-  }else{
-    const head=['id','placa','vin','tipo','teu','ton','ejes','dim','anio','tara','qr','frenos','susp','conjunto','estado'];
-    const rows=REMOLQUES.map(u=>head.map(h=>u[h]));
-    download('remolques.csv','\uFEFF'+[head,...rows].map(r=>r.map(cell).join(';')).join('\r\n'),'text/csv;charset=utf-8');
-  }
-  snd('ok');toast(`${type==='tracto'?'tractos':'remolques'}.csv descargado`,'ok');
-}
-function exportKanban(){
-  const head=['id','titulo','descripcion','columna','prioridad','unidad','fecha','ot','tags'];
-  const rows=CARDS.map(c=>[c.id,c.title,c.desc,COLS.find(x=>x.id===c.col).name,c.prio,c.meta.unidad,c.meta.fecha,c.meta.ot,c.tags.map(t=>t.t).join(',')]);
-  const cell=v=>{let s=String(v??'');return /[";\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
-  download('kanban.csv','\uFEFF'+[head,...rows].map(r=>r.map(cell).join(';')).join('\r\n'),'text/csv;charset=utf-8');
-  snd('ok');toast('kanban.csv descargado','ok');
-}
-
-/* ---------- zip ---------- */
-const CRCT=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
-function crc32(u8){let c=0xFFFFFFFF;for(let i=0;i<u8.length;i++)c=CRCT[(c^u8[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
-function zipBlob(list){
-  const enc=new TextEncoder(),chunks=[],cent=[];let off=0;
-  const d=new Date(),tm=((d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1))&0xFFFF,
-        dd=(((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate())&0xFFFF;
-  for(const f of list){
-    const nm=enc.encode(f.path),dt=enc.encode(f.content),crc=crc32(dt);
-    const lh=new Uint8Array(30+nm.length),lv=new DataView(lh.buffer);
-    lv.setUint32(0,0x04034b50,true);lv.setUint16(4,20,true);lv.setUint16(6,0x0800,true);lv.setUint16(8,0,true);
-    lv.setUint16(10,tm,true);lv.setUint16(12,dd,true);lv.setUint32(14,crc,true);lv.setUint32(18,dt.length,true);lv.setUint32(22,dt.length,true);
-    lv.setUint16(26,nm.length,true);lv.setUint16(28,0,true);lh.set(nm,30);
-    chunks.push(lh,dt);
-    const ch=new Uint8Array(46+nm.length),cv=new DataView(ch.buffer);
-    cv.setUint32(0,0x02014b50,true);cv.setUint16(4,20,true);cv.setUint16(6,20,true);cv.setUint16(8,0x0800,true);cv.setUint16(10,0,true);
-    cv.setUint16(12,tm,true);cv.setUint16(14,dd,true);cv.setUint32(16,crc,true);cv.setUint32(20,dt.length,true);cv.setUint32(24,dt.length,true);
-    cv.setUint16(28,nm.length,true);cv.setUint32(42,off,true);ch.set(nm,46);
-    cent.push(ch);off+=lh.length+dt.length;
-  }
-  let cs=0;cent.forEach(c=>cs+=c.length);
-  const eo=new Uint8Array(22),ev=new DataView(eo.buffer);
-  ev.setUint32(0,0x06054b50,true);ev.setUint16(8,list.length,true);ev.setUint16(10,list.length,true);
-  ev.setUint32(12,cs,true);ev.setUint32(16,off,true);
-  return new Blob([...chunks,...cent,eo],{type:'application/zip'});
-}
-function downloadZip(){
-  const list=Object.entries(FILES).map(([path,f])=>({path,content:f.content}));
-  download('taller-fm-github-kit.zip',zipBlob(list));
-}
-
-/* ---------- nav ---------- */
-const NAV=[['sec-repo','Repositorio'],['sec-kanban','Kanban'],['sec-flota','Flota'],['sec-issues','Issues'],['sec-workflow','Flujo']];
-function renderNav(){$('#nav').innerHTML=NAV.map(n=>`<a href="#${n[0]}" data-sec="${n[0]}">${n[1]}</a>`).join('')}
-const secColors={'sec-repo':'#FFB020','sec-kanban':'#238636','sec-flota':'#2DD4BF','sec-issues':'#F472B6','sec-workflow':'#A78BFA'};
-const io2=new IntersectionObserver(es=>{
-  es.forEach(x=>{if(x.isIntersecting){
-    document.documentElement.style.setProperty('--sect',secColors[x.target.id]||'#FFB020');
-    $$('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.sec===x.target.id));
-  }})},{rootMargin:'-45% 0px -50% 0px'});
-$$('section').forEach(s=>io2.observe(s));
-const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.06});
-$$('.reveal').forEach(el=>io.observe(el));
-
-/* init */
-renderNav();renderAll();
-setTimeout(()=>toast('Kit listo: estructura de repo, Kanban con 6 columnas, base de flota (tractos + remolques) y templates de issues.','info',6500),700);
+renderAll();
+setTimeout(()=>toast('✓ Studio cargado. Haz clic en "Kit .zip" para descargar todos los archivos.','info',5000),500);
 </script>
 </body>
 </html>
