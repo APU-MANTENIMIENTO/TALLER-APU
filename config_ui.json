@@ -1,0 +1,11 @@
+{
+  "theme": "light",
+  "sat": 90,
+  "fs": 100,
+  "dens": "comoda",
+  "contrast": true,
+  "pat": false,
+  "icons": true,
+  "showLegend": false,
+  "showCamionetas": false
+}
