@@ -1,7 +1,0 @@
-node_modules/
-.env
-*.log
-.vscode/
-.DS_Store
-dist/
-*.zip
