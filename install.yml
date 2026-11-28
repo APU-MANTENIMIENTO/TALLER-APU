@@ -1,0 +1,2 @@
+- name: NPM install cache
+  uses: c-hive/gha-npm-cache@v1
